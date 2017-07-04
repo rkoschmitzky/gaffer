@@ -1183,7 +1183,7 @@ size_t StandardGraphLayout::unconnectedInputPlugs( NodeGadget *nodeGadget, std::
 	plugs.clear();
 	for( RecursiveInputPlugIterator it( nodeGadget->node() ); !it.done(); it++ )
 	{
-		if( (*it)->getInput<Plug>() == 0 and nodeGadget->nodule( it->get() ) )
+		if( (*it)->getInput<Plug>() == 0 && nodeGadget->nodule( it->get() ) )
 		{
 			plugs.push_back( it->get() );
 		}

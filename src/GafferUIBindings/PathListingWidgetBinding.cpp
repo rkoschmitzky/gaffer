@@ -494,7 +494,7 @@ class PathModel : public QAbstractItemModel
 		virtual QModelIndex index( int row, int column, const QModelIndex &parentIndex = QModelIndex() ) const
 		{
 			Item *item = parentIndex.isValid() ? static_cast<Item *>( parentIndex.internalPointer() ) : m_rootItem;
-			if( row >=0 and row < (int)item->childItems( this ).size() and column >=0 and column < (int)m_columns.size() )
+			if( row >=0 && row < (int)item->childItems( this ).size() && column >=0 && column < (int)m_columns.size() )
 			{
 				return createIndex( row, column, item->childItems( this )[row] );
 			}
