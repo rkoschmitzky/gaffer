@@ -43,6 +43,14 @@
 
 #include "GafferSceneUI/ObjectVisualiser.h"
 
+// Windows has these defined
+#ifdef near
+#undef near
+#endif
+#ifdef far
+#undef far
+#endif
+
 using namespace std;
 using namespace Imath;
 using namespace GafferSceneUI;

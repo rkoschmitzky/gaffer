@@ -173,6 +173,9 @@ class GAFFERIMAGEUI_API ImageGadget : public GafferUI::Gadget
 		// be inserted/updated in parallel in a multithreaded
 		// update step.
 
+#ifdef _MSC_VER
+	public:
+#endif
 		struct TileIndex
 		{
 			TileIndex( const Imath::V2i &tileOrigin, IECore::InternedString channelName )
@@ -188,7 +191,9 @@ class GAFFERIMAGEUI_API ImageGadget : public GafferUI::Gadget
 			Imath::V2i tileOrigin;
 			IECore::InternedString channelName;
 		};
-
+#ifdef _MSC_VER
+	private:
+#endif
 		struct Tile
 		{
 			IECore::MurmurHash channelDataHash;

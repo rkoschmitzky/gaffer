@@ -34,7 +34,9 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#ifndef _MSC_VER
 #include <sys/utsname.h>
+#endif
 #include <zlib.h>
 
 #include "tbb/spin_mutex.h"
@@ -667,11 +669,13 @@ ImageSpec createImageSpec( const ImageWriter *node, const ImageOutput *out, cons
 	// Add common attribs to the spec
 	std::string software = ( boost::format( "Gaffer %d.%d.%d.%d" ) % GAFFER_MILESTONE_VERSION % GAFFER_MAJOR_VERSION % GAFFER_MINOR_VERSION % GAFFER_PATCH_VERSION ).str();
 	spec.attribute( "Software", software );
+#ifndef _MSC_VER
 	struct utsname info;
 	if ( !uname( &info ) )
 	{
 		spec.attribute( "HostComputer", info.nodename );
 	}
+#endif
 	if ( const char *artist = getenv( "USER" ) )
 	{
 		spec.attribute( "Artist", artist );

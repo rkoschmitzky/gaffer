@@ -121,7 +121,7 @@ int index( const GraphComponent *parent, const InternedString &gadgetName, int d
 	return i ? i->readable() : defaultValue;
 }
 
-std::string section( const GraphComponent *parent, const InternedString &gadgetName )
+std::string _section( const GraphComponent *parent, const InternedString &gadgetName )
 {
 	ConstStringDataPtr s = Metadata::value<StringData>( parent, "noduleLayout:customGadget:" + gadgetName.string() + ":section" );
 	return s ? s->readable() : "top";
@@ -129,7 +129,7 @@ std::string section( const GraphComponent *parent, const InternedString &gadgetN
 
 bool visible( const GraphComponent *parent, const InternedString &gadgetName, IECore::InternedString section )
 {
-	if( section != InternedString() && ::section( parent, gadgetName ) != section.string() )
+	if( section != InternedString() && _section( parent, gadgetName ) != section.string() )
 	{
 		return false;
 	}
@@ -156,7 +156,7 @@ int index( const Plug *plug, int defaultValue )
 	return i ? i->readable() : defaultValue;
 }
 
-std::string section( const Plug *plug )
+std::string _section( const Plug *plug )
 {
 	ConstStringDataPtr s = Metadata::value<StringData>( plug, g_sectionKey );
 	if( !s )
@@ -173,7 +173,7 @@ std::string section( const Plug *plug )
 
 bool visible( const Plug *plug, IECore::InternedString section )
 {
-	if( section != InternedString() && ::section( plug ) != section.string() )
+	if( section != InternedString() && _section( plug ) != section.string() )
 	{
 		return false;
 	}
@@ -296,7 +296,7 @@ LinearContainer::Orientation orientation( const Gaffer::GraphComponent *parent, 
 				// Backwards compatibility with old CompoundNodule metadata.
 				return s->readable() == "x" ? LinearContainer::X : LinearContainer::Y;
 			}
-			section = ::section( parentPlug );
+			section = _section( parentPlug );
 		}
 	}
 
@@ -343,7 +343,7 @@ LinearContainer::Direction direction( const Gaffer::GraphComponent *parent, IECo
 	{
 		if( const Plug *parentPlug = runTimeCast<const Plug>( parent ) )
 		{
-			section = ::section( parentPlug );
+			section = _section( parentPlug );
 		}
 	}
 

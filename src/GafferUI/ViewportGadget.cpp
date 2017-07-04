@@ -35,7 +35,11 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#ifndef _WIN32
 #include <sys/time.h>
+#else
+#include <windows.h>
+#endif
 
 #include "boost/bind.hpp"
 #include "boost/bind/placeholders.hpp"
@@ -624,9 +628,13 @@ bool ViewportGadget::dragMove( GadgetPtr gadget, const DragDropEvent &event )
 
 static double currentTime()
 {
+#ifndef _WIN32
 	timeval t;
 	gettimeofday( &t, NULL ) ;
 	return (double)t.tv_sec + (double)t.tv_usec / 1000000.0;
+#else
+	return (double)timeGetTime();
+#endif
 }
 
 void ViewportGadget::trackDrag( const DragDropEvent &event )
