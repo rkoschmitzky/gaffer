@@ -40,6 +40,8 @@
 
 #include "GafferBindings/DependencyNodeBinding.h"
 
+#include "GafferImageBindings/DeleteChannelsBinding.h"
+
 using namespace boost::python;
 using namespace GafferImage;
 using namespace GafferBindings;

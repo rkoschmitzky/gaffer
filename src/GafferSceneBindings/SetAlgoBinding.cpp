@@ -41,6 +41,8 @@
 #include "GafferScene/SetAlgo.h"
 #include "GafferScene/PathMatcher.h"
 
+#include "GafferSceneBindings/SetAlgoBinding.h"
+
 using namespace boost::python;
 using namespace GafferScene;
 

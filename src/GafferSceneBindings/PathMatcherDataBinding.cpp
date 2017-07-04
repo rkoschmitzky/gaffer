@@ -40,6 +40,8 @@
 
 #include "GafferScene/PathMatcherData.h"
 
+#include "GafferSceneBindings/PathMatcherDataBinding.h"
+
 using namespace boost::python;
 using namespace GafferScene;
 

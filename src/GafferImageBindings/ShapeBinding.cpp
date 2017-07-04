@@ -38,6 +38,8 @@
 
 #include "GafferBindings/DependencyNodeBinding.h"
 
+#include "GafferImageBindings/ShapeBinding.h"
+
 using namespace GafferImage;
 
 namespace GafferImageBindings

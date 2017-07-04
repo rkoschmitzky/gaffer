@@ -38,6 +38,8 @@
 
 #include "GafferBindings/DependencyNodeBinding.h"
 
+#include "GafferImageBindings/TextBinding.h"
+
 using namespace boost::python;
 using namespace GafferImage;
 

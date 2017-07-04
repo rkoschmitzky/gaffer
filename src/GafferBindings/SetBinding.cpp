@@ -43,6 +43,7 @@
 #include "Gaffer/Set.h"
 
 #include "GafferBindings/SignalBinding.h"
+#include "GafferBindings/SetBinding.h"
 
 using namespace Gaffer;
 

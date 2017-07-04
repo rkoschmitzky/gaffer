@@ -41,6 +41,8 @@
 
 #include "GafferImage/FormatData.h"
 
+#include "GafferImageBindings/FormatDataBinding.h"
+
 using namespace boost::python;
 using namespace GafferImage;
 
