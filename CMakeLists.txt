@@ -85,7 +85,7 @@ find_package( PNG REQUIRED ) # For freetype linking
 find_package( Arnold REQUIRED )
 find_package( OpenGL REQUIRED )
 find_package( GLEW REQUIRED )
-find_package( Qt4 4.8 REQUIRED QtCore QtGui QtOpenGL )
+find_package( Qt5 5.6 REQUIRED Core Gui OpenGL )
 find_package( Appleseed REQUIRED )
 
 include_directories( ${TBB_INCLUDE_DIRS} )
@@ -243,7 +243,7 @@ target_link_libraries( GafferUI ${BASE_LIBS} Gaffer ${Iex_LIB} ${Cortex_IECOREGL
 
 # GafferUI Bindings
 add_library( GafferUIBindings SHARED ${GAFFERUIBINDINGS_CXX_FILES} )
-target_link_libraries( GafferUIBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferUI GafferBindings Qt4::QtCore Qt4::QtGui Qt4::QtOpenGL )
+target_link_libraries( GafferUIBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferUI GafferBindings Qt5::Core Qt5::Gui Qt5::OpenGL )
 target_compile_definitions( GafferUIBindings PRIVATE -DQT_NO_KEYWORDS )
 
 # GafferUI Python Module
