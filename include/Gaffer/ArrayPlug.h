@@ -37,7 +37,7 @@
 #ifndef GAFFER_ARRAYPLUG_H
 #define GAFFER_ARRAYPLUG_H
 
-#include "OpenEXR/ImathLimits.h"
+#include <limits>
 
 #include "Gaffer/Export.h"
 #include "Gaffer/Plug.h"
@@ -65,7 +65,7 @@ class GAFFER_API ArrayPlug : public Plug
 			Direction direction = In,
 			PlugPtr element = NULL,
 			size_t minSize = 1,
-			size_t maxSize = Imath::limits<size_t>::max(),
+			size_t maxSize = std::numeric_limits<size_t>::max(),
 			unsigned flags = Default
 		);
 
