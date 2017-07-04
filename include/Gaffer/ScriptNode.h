@@ -46,6 +46,7 @@
 #include "Gaffer/TypedPlug.h"
 #include "Gaffer/Container.h"
 #include "Gaffer/Set.h"
+#include "Gaffer/StandardSet.h"
 #include "Gaffer/UndoScope.h"
 #include "Gaffer/Action.h"
 #include "Gaffer/Behaviours/OrphanRemover.h"
