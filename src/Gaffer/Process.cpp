@@ -34,8 +34,6 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-#include <stack>
-
 #include "boost/container/flat_set.hpp"
 
 #include "Gaffer/Process.h"
@@ -52,16 +50,6 @@ typedef boost::container::flat_set<Monitor *> Monitors;
 Monitors g_activeMonitors;
 
 } // namespace
-
-struct Process::ThreadData
-{
-
-	typedef std::stack<const Process *> Stack;
-	Stack stack;
-
-	const Plug *errorSource;
-
-};
 
 tbb::enumerable_thread_specific<Process::ThreadData, tbb::cache_aligned_allocator<Process::ThreadData>, tbb::ets_key_per_instance> Process::g_threadData;
 

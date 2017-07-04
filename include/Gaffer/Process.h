@@ -37,6 +37,8 @@
 #ifndef GAFFER_PROCESS_H
 #define GAFFER_PROCESS_H
 
+#include <stack>
+
 #include "tbb/enumerable_thread_specific.h"
 
 #include "boost/noncopyable.hpp"
@@ -107,7 +109,15 @@ class GAFFER_API Process : public boost::noncopyable
 
 		void emitError( const std::string &error ) const;
 
-		struct ThreadData;
+		struct ThreadData
+		{
+
+			typedef std::stack<const Process *> Stack;
+			Stack stack;
+
+			const Plug *errorSource;
+
+		};
 
 		IECore::InternedString m_type;
 		const Plug *m_plug;
