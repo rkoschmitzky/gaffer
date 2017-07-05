@@ -80,7 +80,7 @@ class PresetDialogue( GafferUI.Dialogue ) :
 	def _updatePresetListing( self ) :
 
 		location = self.__locationMenu.getCurrentItem()
-		presetLoader = IECore.ClassLoader( IECore.SearchPath( location, ":" ) )
+		presetLoader = IECore.ClassLoader( IECore.SearchPath( location, os.pathsep ) )
 		parameterised = self._parameterHandler.plug().node().getParameterised()[0]
 
 		d = {}
@@ -100,7 +100,7 @@ class PresetDialogue( GafferUI.Dialogue ) :
 	def __searchPaths( self, owned, writable ) :
 
 		searchPathEnvVar = _searchPathEnvVar( self._parameterHandler.plug().node() )
-		paths = os.environ[searchPathEnvVar].split( ":" )
+		paths = os.environ[searchPathEnvVar].split( os.pathsep )
 
 		existingPaths = []
 		for path in paths :
@@ -428,7 +428,7 @@ class DeletePresetsDialogue( PresetDialogue ) :
 def autoLoad( parameterisedHolder ) :
 
 	searchPaths = os.environ.get( _searchPathEnvVar( parameterisedHolder ), "" )
-	searchPaths = IECore.SearchPath( searchPaths, ":" )
+	searchPaths = IECore.SearchPath( searchPaths, os.pathsep )
 	presetLoader = IECore.ClassLoader( searchPaths )
 
 	parameterised = parameterisedHolder.getParameterised()[0]

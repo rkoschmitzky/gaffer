@@ -418,7 +418,7 @@ class ArnoldShaderTest( GafferSceneTest.SceneTestCase ) :
 			self.assertTrue( isinstance( p, Gaffer.Color4fPlug ) )
 
 		self.addCleanup( os.environ.__setitem__, "ARNOLD_PLUGIN_PATH", os.environ["ARNOLD_PLUGIN_PATH"] )
-		os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + ":" + os.path.join( os.path.dirname( __file__ ), "metadata" )
+		os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + os.pathsep + os.path.join( os.path.dirname( __file__ ), "metadata" )
 
 		self.__forceArnoldRestart()
 
@@ -440,7 +440,7 @@ class ArnoldShaderTest( GafferSceneTest.SceneTestCase ) :
 		self.assertTrue( "aov_direct_diffuse" in n["parameters"] )
 
 		self.addCleanup( os.environ.__setitem__, "ARNOLD_PLUGIN_PATH", os.environ["ARNOLD_PLUGIN_PATH"] )
-		os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + ":" + os.path.join( os.path.dirname( __file__ ), "metadata" )
+		os.environ["ARNOLD_PLUGIN_PATH"] = os.environ["ARNOLD_PLUGIN_PATH"] + os.pathsep + os.path.join( os.path.dirname( __file__ ), "metadata" )
 
 		self.__forceArnoldRestart()
 
