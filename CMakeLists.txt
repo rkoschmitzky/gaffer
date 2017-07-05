@@ -485,18 +485,18 @@ endforeach()
 
 # Install Gaffer Files
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/apps
-         DESTINATION apps )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/arnold
-         DESTINATION arnold )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/bin
-         DESTINATION bin )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/glsl
-         DESTINATION glsl )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/python
-         DESTINATION python )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/arnold
-         DESTINATION arnold )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/shaders
-         DESTINATION shaders )
+         DESTINATION . )
 install( DIRECTORY ${CMAKE_SOURCE_DIR}/startup
-         DESTINATION startup )
+         DESTINATION . )
