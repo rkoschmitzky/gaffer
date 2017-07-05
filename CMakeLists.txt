@@ -146,7 +146,7 @@ set( GAFFER_LIB_NAMES
   Gaffer
   GafferAppleseed
 #  GafferArnold
-#  GafferCortex
+  GafferCortex
   GafferDispatch
   GafferImage
   GafferImageUI
@@ -159,7 +159,7 @@ set( GAFFER_LIB_NAMES
 
 set( GAFFERBINDINGS_LIB_NAMES 
   Gaffer
-#  GafferCortex
+  GafferCortex
   GafferDispatch
   GafferImage
   GafferImageUI
@@ -178,7 +178,7 @@ set( GAFFER_PYTHON_NAMES
   Gaffer
   GafferAppleseed
 #  GafferArnold
-#  GafferCortex
+  GafferCortex
   GafferDispatch
   GafferImage
   GafferOSL
@@ -327,16 +327,16 @@ add_library( _GafferSceneUI MODULE ${GAFFERSCENEUI_CXX_MODULE_FILES} )
 target_link_libraries( _GafferSceneUI ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferUIBindings GafferSceneUIBindings )
 
 # GafferCortex
-#add_library( GafferCortex SHARED ${GAFFERCORTEX_CXX_FILES} )
-#target_link_libraries( GafferCortex ${BASE_LIBS} Gaffer GafferDispatch )
+add_library( GafferCortex SHARED ${GAFFERCORTEX_CXX_FILES} )
+target_link_libraries( GafferCortex ${BASE_LIBS} Gaffer GafferDispatch )
 
 # GafferCortex Bindings
-#add_library( GafferCortexBindings SHARED ${GAFFERCORTEXBINDINGS_CXX_FILES} )
-#target_link_libraries( GafferCortexBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferCortex GafferDispatch )
+add_library( GafferCortexBindings SHARED ${GAFFERCORTEXBINDINGS_CXX_FILES} )
+target_link_libraries( GafferCortexBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferCortex GafferDispatch )
 
 # GafferCortex Python Module
-#add_library( _GafferCortex MODULE ${GAFFERCORTEX_CXX_MODULE_FILES} )
-#target_link_libraries( _GafferCortex ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferCortexBindings )
+add_library( _GafferCortex MODULE ${GAFFERCORTEX_CXX_MODULE_FILES} )
+target_link_libraries( _GafferCortex ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferCortexBindings )
 
 # GafferOSL
 add_library( GafferOSL SHARED ${GAFFEROSL_CXX_FILES} )
@@ -391,7 +391,7 @@ if( WIN32 )
   set_target_properties( _Gaffer PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferAppleseed PROPERTIES SUFFIX ".pyd" )
 #   set_target_properties( _GafferArnold PROPERTIES SUFFIX ".pyd" )
-#   set_target_properties( _GafferCortex PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferCortex PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferDispatch PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferImage PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferImageUI PROPERTIES SUFFIX ".pyd" )
@@ -406,7 +406,7 @@ endif()
 #add_dependencies( Gaffer )
 add_dependencies( GafferAppleseed Gaffer GafferDispatch GafferScene )
 #add_dependencies( GafferArnold Gaffer GafferDispatch GafferScene )
-#add_dependencies( GafferCortex Gaffer GafferDispatch )
+add_dependencies( GafferCortex Gaffer GafferDispatch )
 add_dependencies( GafferDispatch Gaffer )
 add_dependencies( GafferImage Gaffer GafferDispatch )
 add_dependencies( GafferImageUI Gaffer GafferImage GafferUI GafferBindings GafferImage GafferDispatch GafferImageUI )
@@ -418,7 +418,7 @@ add_dependencies( GafferUI Gaffer )
 
 # Binding Dependencies
 add_dependencies( GafferBindings Gaffer )
-#add_dependencies( GafferCortexBindings Gaffer GafferBindings GafferCortex GafferDispatch )
+add_dependencies( GafferCortexBindings Gaffer GafferBindings GafferCortex GafferDispatch )
 add_dependencies( GafferDispatchBindings Gaffer GafferBindings GafferDispatch )
 add_dependencies( GafferImageBindings Gaffer GafferBindings GafferImage GafferDispatch )
 add_dependencies( GafferImageUIBindings Gaffer GafferBindings GafferImage GafferDispatch )
@@ -433,7 +433,7 @@ add_dependencies( GafferSceneTest Gaffer GafferScene GafferDispatch )
 
 # Module dependencies
 add_dependencies( _Gaffer Gaffer GafferBindings )
-#add_dependencies( _GafferCortex Gaffer GafferBindings GafferCortexBindings )
+add_dependencies( _GafferCortex Gaffer GafferBindings GafferCortexBindings )
 add_dependencies( _GafferDispatch Gaffer GafferBindings GafferDispatchBindings )
 add_dependencies( _GafferImage Gaffer GafferImage GafferBindings GafferImageBindings GafferDispatchBindings )
 add_dependencies( _GafferImageUI Gaffer GafferBindings GafferUIBindings GafferImageUIBindings )
