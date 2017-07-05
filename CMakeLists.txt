@@ -400,10 +400,12 @@ if( WIN32 )
   set_target_properties( _GafferScene PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferSceneUI PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferUI PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferTest PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferSceneTest PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferImageTest PROPERTIES SUFFIX ".pyd" )
 endif()
 
 # Dependencies
-#add_dependencies( Gaffer )
 add_dependencies( GafferAppleseed Gaffer GafferDispatch GafferScene )
 #add_dependencies( GafferArnold Gaffer GafferDispatch GafferScene )
 add_dependencies( GafferCortex Gaffer GafferDispatch )
@@ -463,6 +465,8 @@ foreach( GAFFER_LIB ${GAFFERTEST_LIB_NAMES} )
   string( TOUPPER ${GAFFER_LIB} _GAFFER_LIB )
   install( TARGETS ${GAFFER_LIB}Test
            DESTINATION lib/ )
+  install( TARGETS _${GAFFER_LIB}Test
+           DESTINATION python/${GAFFER_LIB}Test )
   install( FILES ${${_GAFFER_LIB}_H_FILES}
            DESTINATION include/${GAFFER_LIB}Test )
 endforeach()

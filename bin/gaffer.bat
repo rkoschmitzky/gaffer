@@ -28,6 +28,7 @@ set PYTHONPATH=%GAFFER_ROOT%\python;%PYTHONPATH%
 
 set PATH=%GAFFER_ROOT%\lib;%PATH%
 
+set QT_OPENGL=desktop
 set QT_QPA_PLATFORM_PLUGIN_PATH=%GAFFER_ROOT%\qt\plugins
 
 set PATH=%GAFFER_ROOT%\bin;%PATH%
@@ -48,4 +49,4 @@ set PYTHONPATH=%PYTHONPATH%;%ARNOLD_ROOT%\python
 
 
 rem Run Gaffer
-python %GAFFER_ROOT%/bin/gaffer.py
+python %GAFFER_ROOT%/bin/gaffer.py %1 %2
