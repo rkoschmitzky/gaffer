@@ -343,8 +343,8 @@ add_library( GafferOSL SHARED ${GAFFEROSL_CXX_FILES} )
 target_link_libraries( GafferOSL ${BASE_LIBS} Gaffer GafferScene GafferImage ${OPENIMAGEIO_LIBRARIES} ${OSL_QUERY_LIBRARY} ${OSL_EXEC_LIBRARY} ${ILMBASE_IEX_LIBRARY} )
 
 # GafferOSL Python Module
-add_library( _GafferOSL MODULE ${GAFFERAPPLESEED_CXX_MODULE_FILES} )
-target_link_libraries( _GafferOSL ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferScene GafferImage GafferOSL GafferAppleseed ${ILMBASE_IEX_LIBRARY} )
+add_library( _GafferOSL MODULE ${GAFFEROSL_CXX_MODULE_FILES} )
+target_link_libraries( _GafferOSL ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferScene GafferImage GafferOSL GafferAppleseed ${Ilmbase_IEX_LIBRARY} )
 
 # GafferAppleseed
 file( GLOB_RECURSE IECOREAPPLESEED_PREVIEW_CXX_FILES RELATIVE ${CMAKE_SOURCE_DIR} src/GafferAppleseed/IECoreAppleseedPreview/*.cpp )
