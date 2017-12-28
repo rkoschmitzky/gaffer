@@ -43,6 +43,15 @@
 
 #include "GafferSceneUI/ObjectVisualiser.h"
 
+#ifdef _MSC_VER
+#ifdef near
+#undef near
+#endif
+#ifdef far
+#undef far
+#endif
+#endif
+
 using namespace std;
 using namespace Imath;
 using namespace GafferSceneUI;
