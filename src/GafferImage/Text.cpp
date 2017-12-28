@@ -41,6 +41,7 @@
 
 #include "tbb/enumerable_thread_specific.h"
 
+#include "IECore/Platform.h"
 #include "IECore/LRUCache.h"
 #include "IECore/SearchPath.h"
 
@@ -90,7 +91,7 @@ typedef std::shared_ptr<FT_FaceRec_> FacePtr;
 FacePtr faceLoader( const std::string &font, size_t &cost )
 {
 	const char *e = getenv( "IECORE_FONT_PATHS" );
-	IECore::SearchPath sp( e ? e : "", ":" );
+	IECore::SearchPath sp( e ? e : "", IECORE_ENVSEP );
 
 	std::string file = sp.find( font ).string();
 	if( !file.size() )

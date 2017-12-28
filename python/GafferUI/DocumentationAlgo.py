@@ -127,7 +127,7 @@ def exportLicenseReference( directory, about ) :
 def exportCommandLineReference( directory, appPath = "$GAFFER_ROOT/apps", ignore = set() ) :
 
 	classLoader = IECore.ClassLoader(
-		IECore.SearchPath( os.path.expandvars( appPath ), ":" )
+		IECore.SearchPath( os.path.expandvars( appPath ), os.pathsep )
 	)
 
 	__makeDirs( directory )

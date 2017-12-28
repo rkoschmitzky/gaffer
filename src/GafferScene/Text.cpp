@@ -34,6 +34,7 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#include "IECore/Platform.h"
 #include "IECore/LRUCache.h"
 #include "IECore/SearchPath.h"
 #include "IECoreScene/Font.h"
@@ -62,7 +63,7 @@ namespace Detail
 FontPtr fontGetter( const std::string &fileName, size_t &cost )
 {
 	const char *e = getenv( "IECORE_FONT_PATHS" );
-	IECore::SearchPath sp( e ? e : "", ":" );
+	IECore::SearchPath sp( e ? e : "", IECORE_ENVSEP );
 
 	std::string resolvedFileName = sp.find( fileName ).string();
 	if( !resolvedFileName.size() )
