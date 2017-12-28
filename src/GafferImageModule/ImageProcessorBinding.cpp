@@ -32,6 +32,8 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
+#include <limits>
+
 #include "boost/python.hpp"
 
 #include "IECorePython/RunTimeTypedBinding.h"
@@ -106,7 +108,7 @@ void GafferImageModule::bindImageProcessor()
 				(
 					arg( "name" ) = GraphComponent::defaultName<ImageProcessor>(),
 					arg( "minInputs" ),
-					arg( "maxInputs" ) = Imath::limits<size_t>::max()
+					arg( "maxInputs" ) = std::numeric_limits<size_t>::max()
 				)
 			)
 		)

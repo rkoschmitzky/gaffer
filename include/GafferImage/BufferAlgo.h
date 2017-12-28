@@ -37,6 +37,8 @@
 #ifndef GAFFERIMAGE_BUFFERALGO_H
 #define GAFFERIMAGE_BUFFERALGO_H
 
+#include <algorithm>
+
 #include "OpenEXR/ImathBox.h"
 
 namespace GafferImage
