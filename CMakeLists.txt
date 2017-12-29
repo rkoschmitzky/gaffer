@@ -147,6 +147,7 @@ set( GAFFER_LIB_NAMES
   Gaffer
   GafferAppleseed
   GafferArnold
+  GafferArnoldUI
   GafferCortex
   GafferDispatch
   GafferImage
@@ -157,6 +158,7 @@ set( GAFFER_LIB_NAMES
   GafferSceneUI
   GafferUI
   GafferVDB
+  GafferVDBUI
   )
 
 set( GAFFERBINDINGS_LIB_NAMES 
@@ -266,7 +268,7 @@ add_library( _GafferImage MODULE ${GAFFERIMAGE_CXX_MODULE_FILES} ${GAFFERIMAGE_H
 target_link_libraries( _GafferImage GafferImage GafferBindings GafferDispatchBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} )
 
 # GafferImage Test
-add_library( GafferImageTest SHARED ${GAFFERIMAGETEST_CXX_FILES} )
+add_library( GafferImageTest SHARED ${GAFFERIMAGETEST_CXX_FILES} ${GAFFERIMAGETEST_H_FILES} )
 target_link_libraries( GafferImageTest ${BASE_LIBS} Gaffer GafferImage ${OPENIMAGEIO_LIBRARIES} )
 
 # GafferImage Test Module
@@ -293,7 +295,7 @@ add_library( _GafferScene MODULE ${GAFFERSCENE_CXX_MODULE_FILES} ${GAFFERSCENE_H
 target_link_libraries( _GafferScene GafferScene GafferBindings GafferDispatchBindings ${BASE_LIBS} ${BASE_PYTHON_LIBS} )
 
 # GafferScene Test
-add_library( GafferSceneTest SHARED ${GAFFERSCENETEST_CXX_FILES} )
+add_library( GafferSceneTest SHARED ${GAFFERSCENETEST_CXX_FILES} ${GAFFERIMAGETEST_H_FILES} )
 target_link_libraries( GafferSceneTest ${BASE_LIBS} Gaffer GafferScene GafferDispatch )
 
 # GafferScene Test Module
@@ -334,6 +336,15 @@ add_library( _GafferVDB MODULE ${GAFFERVDB_CXX_MODULE_FILES} )
 target_link_libraries( _GafferVDB GafferVDB ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferBindings GafferScene ${OpenVDB_LIBRARIES} ${Cortex_IECORESCENE_LIBRARY} )
 target_compile_options( _GafferVDB PRIVATE -DOPENVDB_3_ABI_COMPATIBLE )
 
+# GafferVDBUI
+add_library( GafferVDBUI SHARED ${GAFFERVDBUI_CXX_FILES} ${GAFFERVDBUI_H_FILES} )
+target_link_libraries( GafferVDBUI ${BASE_LIBS} Gaffer GafferVDB GafferSceneUI ${OpenVDB_LIBRARIES} ${Cortex_IECOREGL_LIBRARY} )
+target_compile_options( GafferVDBUI PRIVATE -DOPENVDB_3_ABI_COMPATIBLE )
+
+# GafferVDBUI Python Module
+add_library( _GafferVDBUI MODULE ${GAFFERVDBUI_CXX_MODULE_FILES} )
+target_link_libraries( _GafferVDBUI GafferVDBUI )
+
 # GafferAppleseed
 file( GLOB IECOREAPPLESEED_PREVIEW_CXX_FILES RELATIVE ${CMAKE_SOURCE_DIR} src/GafferAppleseed/IECoreAppleseedPreview/*.cpp )
 add_library( GafferAppleseed SHARED ${GAFFERAPPLESEED_CXX_FILES} ${GAFFERAPPLESEED_H_FILES} ${IECOREAPPLESEED_PREVIEW_CXX_FILES} )
@@ -354,6 +365,14 @@ target_compile_options( GafferArnold PRIVATE -DOPENVDB_3_ABI_COMPATIBLE )
 # GafferArnold Python Module
 add_library( _GafferArnold MODULE ${GAFFERARNOLD_CXX_MODULE_FILES} )
 target_link_libraries( _GafferArnold ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferScene GafferBindings GafferDispatch GafferArnold GafferBindings )
+
+# GafferArnoldUI
+add_library( GafferArnoldUI SHARED ${GAFFERARNOLDUI_CXX_FILES} ${GAFFERARNOLDUI_H_FILES} )
+target_link_libraries( GafferArnoldUI ${BASE_LIBS} Gaffer GafferScene GafferSceneUI GafferOSL ${Cortex_IECOREGL_LIBRARY} )
+
+# GafferArnoldUI Python Module
+add_library( _GafferArnoldUI MODULE ${GAFFERARNOLDUI_CXX_MODULE_FILES} )
+target_link_libraries( _GafferArnoldUI GafferArnoldUI )
 
 # GafferDelight
 #add_library( GafferRenderMan SHARED ${GAFFERRENDERMAN_CXX_FILES} )
@@ -380,6 +399,7 @@ if( WIN32 )
   set_target_properties( _Gaffer PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferAppleseed PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferArnold PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferArnoldUI PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferCortex PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferDispatch PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferImage PROPERTIES SUFFIX ".pyd" )
@@ -392,11 +412,14 @@ if( WIN32 )
   set_target_properties( _GafferTest PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferSceneTest PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferImageTest PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferVDB PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferVDBUI PROPERTIES SUFFIX ".pyd" )
 endif()
 
 # Dependencies
 add_dependencies( GafferAppleseed Gaffer GafferDispatch GafferScene )
 add_dependencies( GafferArnold Gaffer GafferDispatch GafferScene GafferOSL )
+add_dependencies( GafferArnoldUI Gaffer GafferScene GafferOSL GafferArnoldUI )
 add_dependencies( GafferCortex Gaffer GafferDispatch )
 add_dependencies( GafferDispatch Gaffer )
 add_dependencies( GafferImage Gaffer GafferDispatch )
@@ -428,6 +451,7 @@ add_dependencies( _GafferUI Gaffer GafferUI GafferBindings )
 add_dependencies( _GafferOSL GafferBindings GafferScene GafferImage GafferOSL )
 add_dependencies( _GafferAppleseed GafferDispatch GafferScene GafferBindings GafferAppleseed )
 add_dependencies( _GafferArnold Gaffer GafferScene GafferBindings GafferDispatch GafferArnold )
+add_dependencies( _GafferArnoldUI Gaffer GafferArnoldUI )
 #add_dependencies( _GafferDelight Gaffer GafferScene GafferBindings GafferDispatch GafferDelight )
 
 add_dependencies( _GafferTest Gaffer GafferBindings GafferTest )
