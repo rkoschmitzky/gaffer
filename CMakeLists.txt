@@ -153,7 +153,7 @@ set( GAFFER_LIB_NAMES
   GafferImage
   GafferImageUI
   GafferOSL
-#  GafferDelight
+  GafferDelight
   GafferScene
   GafferSceneUI
   GafferUI
@@ -180,7 +180,7 @@ set( GAFFER_PYTHON_NAMES
   GafferDispatch
   GafferImage
   GafferOSL
-#  GafferDelight
+  GafferDelight
   GafferScene
   GafferTractor
   GafferVDB
@@ -375,12 +375,12 @@ add_library( _GafferArnoldUI MODULE ${GAFFERARNOLDUI_CXX_MODULE_FILES} )
 target_link_libraries( _GafferArnoldUI GafferArnoldUI )
 
 # GafferDelight
-#add_library( GafferRenderMan SHARED ${GAFFERRENDERMAN_CXX_FILES} )
-#target_link_libraries( GafferRenderMan ${BASE_LIBS} Gaffer GafferDispatch GafferScene ${Cortex_IECORERI_LIBRARY} )
+add_library( GafferDelight SHARED ${GAFFERDELIGHT_CXX_FILES} ${GAFFERDELIGHT_H_FILES} )
+target_link_libraries( GafferDelight ${BASE_LIBS} Gaffer GafferDispatch GafferScene )
 
 # GafferDelight Python Module
-#add_library( _GafferRenderMan MODULE ${GAFFERRENDERMAN_CXX_MODULE_FILES} )
-#target_link_libraries( _GafferRenderMan ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferScene GafferBindings GafferDispatch GafferRenderMan GafferBindings )
+add_library( _GafferDelight MODULE ${GAFFERDELIGHT_CXX_MODULE_FILES} )
+target_link_libraries( _GafferDelight ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferScene GafferBindings GafferDispatch GafferDelight GafferBindings )
 
 # Python modules need special naming
 foreach( GAFFER_LIB ${GAFFER_LIB_NAMES} )
@@ -405,7 +405,7 @@ if( WIN32 )
   set_target_properties( _GafferImage PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferImageUI PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferOSL PROPERTIES SUFFIX ".pyd" )
-#   set_target_properties( _GafferRenderMan PROPERTIES SUFFIX ".pyd" )
+  set_target_properties( _GafferDelight PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferScene PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferSceneUI PROPERTIES SUFFIX ".pyd" )
   set_target_properties( _GafferUI PROPERTIES SUFFIX ".pyd" )
@@ -425,7 +425,7 @@ add_dependencies( GafferDispatch Gaffer )
 add_dependencies( GafferImage Gaffer GafferDispatch )
 add_dependencies( GafferImageUI Gaffer GafferImage GafferUI GafferBindings GafferImage GafferDispatch GafferImageUI )
 add_dependencies( GafferOSL Gaffer GafferScene GafferImage ) 
-#add_dependencies( GafferDelight Gaffer GafferDispatch GafferScene )
+add_dependencies( GafferDelight Gaffer GafferDispatch GafferScene )
 add_dependencies( GafferScene Gaffer GafferImage GafferDispatch )
 add_dependencies( GafferSceneUI Gaffer GafferUI GafferImage GafferImageUI GafferScene )
 add_dependencies( GafferUI Gaffer GafferScene )
@@ -452,7 +452,7 @@ add_dependencies( _GafferOSL GafferBindings GafferScene GafferImage GafferOSL )
 add_dependencies( _GafferAppleseed GafferDispatch GafferScene GafferBindings GafferAppleseed )
 add_dependencies( _GafferArnold Gaffer GafferScene GafferBindings GafferDispatch GafferArnold )
 add_dependencies( _GafferArnoldUI Gaffer GafferArnoldUI )
-#add_dependencies( _GafferDelight Gaffer GafferScene GafferBindings GafferDispatch GafferDelight )
+add_dependencies( _GafferDelight Gaffer GafferScene GafferBindings GafferDispatch GafferDelight )
 
 add_dependencies( _GafferTest Gaffer GafferBindings GafferTest )
 add_dependencies( _GafferImageTest Gaffer GafferImage GafferImageTest )
