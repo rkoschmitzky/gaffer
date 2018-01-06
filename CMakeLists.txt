@@ -349,12 +349,12 @@ target_link_libraries( _GafferVDBUI GafferVDBUI )
 file( GLOB IECOREAPPLESEED_PREVIEW_CXX_FILES RELATIVE ${CMAKE_SOURCE_DIR} src/GafferAppleseed/IECoreAppleseedPreview/*.cpp )
 add_library( GafferAppleseed SHARED ${GAFFERAPPLESEED_CXX_FILES} ${GAFFERAPPLESEED_H_FILES} ${IECOREAPPLESEED_PREVIEW_CXX_FILES} )
 target_link_libraries( GafferAppleseed ${BASE_LIBS} Gaffer GafferDispatch GafferScene ${APPLESEED_LIBRARY} ${Cortex_IECOREAPPLESEED_LIBRARY} ${OPENIMAGEIO_LIBRARIES} ${OSL_QUERY_LIBRARY} )
-target_compile_options( GafferAppleseed PRIVATE -DAPPLESEED_ENABLE_IMATH_INTEROP -DAPPLESEED_WITH_OIIO -DAPPLESEED_WITH_OSL -DAPPLESEED_USE_SSE )
+target_compile_options( GafferAppleseed PRIVATE -DAPPLESEED_ENABLE_IMATH_INTEROP -DAPPLESEED_USE_SSE )
 
 # GafferAppleseed Python Module
 add_library( _GafferAppleseed MODULE ${GAFFERAPPLESEED_CXX_MODULE_FILES} )
 target_link_libraries( _GafferAppleseed ${BASE_LIBS} ${BASE_PYTHON_LIBS} GafferDispatch GafferScene GafferBindings GafferAppleseed )
-target_compile_options( _GafferAppleseed PRIVATE -DAPPLESEED_ENABLE_IMATH_INTEROP -DAPPLESEED_WITH_OIIO -DAPPLESEED_WITH_OSL -DAPPLESEED_USE_SSE )
+target_compile_options( _GafferAppleseed PRIVATE -DAPPLESEED_ENABLE_IMATH_INTEROP -DAPPLESEED_USE_SSE )
 
 # GafferArnold
 file( GLOB IECOREARNOLD_PREVIEW_CXX_FILES RELATIVE ${CMAKE_SOURCE_DIR} src/GafferArnold/IECoreArnoldPreview/*.cpp )
