@@ -19,7 +19,7 @@ add_definitions( -DGAFFER_MILESTONE_VERSION=${GAFFER_MILESTONE_VERSION}
 
 option( WITH_TESTS "Compile tests" OFF )
 
-set( GAFFER_SOURCE_DIR ${CMAKE_SOURCE_DIR} )
+set( GAFFER_SOURCE_DIR ${CMAKE_SOURCE_DIR}/../.. )
 
 #-******************************************************************************
 #-******************************************************************************
