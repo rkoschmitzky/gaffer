@@ -45,4 +45,4 @@ IECORE_RUNTIMETYPED_DEFINETEMPLATESPECIALISATION( Gaffer::DeleteContextVariables
 }
 
 // explicit instantiation
-template class GAFFER_API Gaffer::DeleteContextVariables<Gaffer::ComputeNode>;
+template class Gaffer::DeleteContextVariables<Gaffer::ComputeNode>;
