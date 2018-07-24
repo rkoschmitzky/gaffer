@@ -384,6 +384,9 @@ def __pathAndBookmarks( scriptWindow ) :
 
 	currentFileName = scriptWindow.scriptNode()["fileName"].getValue()
 	if currentFileName :
+		currentPath = os.path.dirname( os.path.abspath( currentFileName ) )
+		if os.name == "nt":
+			currentPath = currentPath.substitute( "\\", "/" )
 		path = Gaffer.FileSystemPath( os.path.dirname( os.path.abspath( currentFileName ) ) )
 	else :
 		path = Gaffer.FileSystemPath( bookmarks.getDefault( scriptWindow ) )
