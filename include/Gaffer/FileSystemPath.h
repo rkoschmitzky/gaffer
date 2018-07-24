@@ -51,7 +51,7 @@ class GAFFER_API FileSystemPath : public Path
 	public :
 
 		FileSystemPath( PathFilterPtr filter = nullptr, bool includeSequences = false );
-		FileSystemPath( const std::string &path, PathFilterPtr filter = nullptr, bool includeSequences = false );
+		FileSystemPath( const std::string &path_str, PathFilterPtr filter = nullptr, bool includeSequences = false );
 		FileSystemPath( const Names &names, const IECore::InternedString &root = "/", PathFilterPtr filter = nullptr, bool includeSequences = false );
 
 		IE_CORE_DECLARERUNTIMETYPEDEXTENSION( Gaffer::FileSystemPath, FileSystemPathTypeId, Path );

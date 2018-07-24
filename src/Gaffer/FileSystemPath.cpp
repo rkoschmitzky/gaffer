@@ -78,9 +78,11 @@ FileSystemPath::FileSystemPath( PathFilterPtr filter, bool includeSequences )
 {
 }
 
-FileSystemPath::FileSystemPath( const std::string &path, PathFilterPtr filter, bool includeSequences )
-	:	Path( path, filter ), m_includeSequences( includeSequences )
+FileSystemPath::FileSystemPath( const std::string &path_str, PathFilterPtr filter, bool includeSequences )
+	:	Path( path_str, filter ), m_includeSequences( includeSequences )
 {
+	path p( this->string() );
+	setFromString( p.generic_string() );
 }
 
 FileSystemPath::FileSystemPath( const Names &names, const IECore::InternedString &root, PathFilterPtr filter, bool includeSequences )
@@ -348,7 +350,7 @@ void FileSystemPath::doChildren( std::vector<PathPtr> &children ) const
 
 	for( directory_iterator it( p ), eIt; it != eIt; ++it )
 	{
-		children.push_back( new FileSystemPath( it->path().string(), const_cast<PathFilter *>( getFilter() ), m_includeSequences ) );
+		children.push_back( new FileSystemPath( it->path().generic_string(), const_cast<PathFilter *>( getFilter() ), m_includeSequences ) );
 	}
 
 	if( m_includeSequences )
@@ -361,7 +363,7 @@ void FileSystemPath::doChildren( std::vector<PathPtr> &children ) const
 			(*it)->getFrameList()->asList( frames );
 			if ( !is_directory( path( (*it)->fileNameForFrame( frames[0] ) ) ) )
 			{
-				children.push_back( new FileSystemPath( path( p / (*it)->getFileName() ).string(), const_cast<PathFilter *>( getFilter() ), m_includeSequences ) );
+				children.push_back( new FileSystemPath( path( p / (*it)->getFileName() ).generic_string(), const_cast<PathFilter *>( getFilter() ), m_includeSequences ) );
 			}
 		}
 	}
