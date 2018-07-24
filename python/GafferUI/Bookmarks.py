@@ -207,9 +207,9 @@ class Bookmarks( object ) :
 			for b in s :
 				if b.name == name :
 					if callable( b.path ) :
-						return b.path( forWidget )
+						return b.path( forWidget ).replace( "\\", "/" )
 					else :
-						return b.path
+						return b.path.replace( "\\", "/" )
 
 		raise KeyError( name )
 
