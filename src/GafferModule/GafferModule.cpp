@@ -48,6 +48,7 @@
 #include "DirtyPropagationScopeBinding.h"
 #include "DotBinding.h"
 #include "ExpressionBinding.h"
+#include "FileSystemPathPlugBinding.h"
 #include "GraphComponentBinding.h"
 #include "MetadataAlgoBinding.h"
 #include "MetadataBinding.h"
@@ -219,6 +220,7 @@ BOOST_PYTHON_MODULE( _Gaffer )
 	bindPlugAlgo();
 	bindParallelAlgo();
 	bindContextProcessor();
+	bindFileSystemPathPlug();
 
 	NodeClass<Backdrop>();
 

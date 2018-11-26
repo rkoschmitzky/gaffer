@@ -1,7 +1,6 @@
 //////////////////////////////////////////////////////////////////////////
 //
-//  Copyright (c) 2011-2012, John Haddon. All rights reserved.
-//  Copyright (c) 2011-2015, Image Engine Design Inc. All rights reserved.
+//  Copyright (c) 2015, Image Engine Design Inc. All rights reserved.
 //
 //  Redistribution and use in source and binary forms, with or without
 //  modification, are permitted provided that the following conditions are
@@ -35,64 +34,14 @@
 //
 //////////////////////////////////////////////////////////////////////////
 
-#include "Gaffer/FileSystemPathPlug.h"
+#ifndef GAFFERMODULE_FILESYSTEMPATHPLUGBINDING_H
+#define GAFFERMODULE_FILESYSTEMPATHPLUGBINDING_H
 
-#include "Gaffer/Context.h"
-#include "Gaffer/Process.h"
-
-using namespace IECore;
-using namespace Gaffer;
-
-IE_CORE_DEFINERUNTIMETYPED( FileSystemPathPlug );
-
-FileSystemPathPlug::FileSystemPathPlug(
-	const std::string &name,
-	Direction direction,
-	const std::string &defaultValue,
-	unsigned flags,
-	unsigned substitutions
-)
-	:	StringPlug( name, direction, defaultValue, flags ), m_substitutions( substitutions )
+namespace GafferModule
 {
-}
 
-FileSystemPathPlug::~FileSystemPathPlug()
-{
-}
+void bindFileSystemPathPlug();
 
-bool FileSystemPathPlug::acceptsInput( const Plug *input ) const
-{
-	if( !ValuePlug::acceptsInput( input ) )
-	{
-		return false;
-	}
-	if( input )
-	{
-		return input->isInstanceOf( StringPlug::staticTypeId() );
-	}
-	return true;
-}
+} // namespace GafferModule
 
-PlugPtr FileSystemPathPlug::createCounterpart( const std::string &name, Direction direction ) const
-{
-	return new FileSystemPathPlug( name, direction, defaultValue(), getFlags(), substitutions() );
-}
-
-std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedHash ) const
-{
-	IECore::ConstObjectPtr o = getObjectValue( precomputedHash );
-	const IECore::StringData *s = IECore::runTimeCast<const IECore::StringData>( o.get() );
-	if( !s )
-	{
-		throw IECore::Exception( "StringPlug::getObjectValue() didn't return StringData - is the hash being computed correctly?" );
-	}
-
-	const bool performSubstitutions =
-		m_substitutions &&
-		direction() == In &&
-		Process::current() &&
-		Context::hasSubstitutions( s->readable() )
-	;
-
-	return performSubstitutions ? Context::current()->substitute( s->readable(), m_substitutions ) : s->readable();
-}
+#endif // GAFFERMODULE_STRINGPLUGBINDING_H

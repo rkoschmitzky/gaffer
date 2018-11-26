@@ -79,19 +79,14 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 		bool acceptsInput( const Plug *input ) const override;
 		PlugPtr createCounterpart( const std::string &name, Direction direction ) const override;
 
-		/// \undoable
-		void setValue( const std::string &value );
 		/// Returns the value. See comments in TypedObjectPlug::getValue()
 		/// for details of the optional precomputedHash argument - and use
 		/// with care!
 		std::string getValue( const IECore::MurmurHash *precomputedHash = nullptr ) const;
 
-		void setFrom( const ValuePlug *other ) override;
+	private :
 
-		IECore::MurmurHash hash() const override;
-		/// Ensures the method above doesn't mask
-		/// ValuePlug::hash( h )
-		using ValuePlug::hash;
+		unsigned m_substitutions;
 
 };
 
@@ -107,4 +102,4 @@ typedef FilteredRecursiveChildIterator<PlugPredicate<Plug::Out, FileSystemPathPl
 
 } // namespace Gaffer
 
-#endif // GAFFER_STRINGPLUG_H
+#endif // GAFFER_FILESYSTEMPATHPLUGPLUG_H

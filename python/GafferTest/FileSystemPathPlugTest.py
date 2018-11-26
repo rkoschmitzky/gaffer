@@ -46,8 +46,34 @@ import GafferTest
 class FileSystemPathPlugTest( GafferTest.TestCase ) :
 
 	def testGenericToWindows( self ) :
-		n = GafferTest.FileSystemPathInOutNode()
-		self.assertHashesValid( n )
+		if os.name == "nt":
+			n = GafferTest.FileSystemPathInOutNode()
+			self.assertHashesValid( n )
+
+			# generic to Windows should preserve drive letters
+			n["in"].setValue( "C:/path/test.exr" )
+			self.assertEqual( n["out"].getValue(), "C:\\path\\test.exr" )
+
+			# generic starting with a single forward slash is interpreted
+			# as a UNC path and should start with double back slash
+			n["in"].setValue( "/test.server/path/test.exr" )
+			self.assertEqual( n["out"].getValue(), "\\\\test.server\\path\\test.exr" )
+
+	def testGenericToPosix( self ):
+		if os.name != "nt":
+			n = GafferTest.FileSystemPathInOutNode()
+			self.assertHashesValid( n )
+
+			# generic to Posix should return unchanged
+			n["in"].setValue( "/path/test.exr" )
+			self.assertEqual( n["out"].getValue(), "/path/test.exr" )
+
+			n["in"].setValue( "/test.server/path/test.exr" )
+			self.assertEqual( n["out"].getValue(), "/test.server/path/test.exr" )
+
+			# TODO: what should a drive letter path return on POSIX?
+			# Error? 'C:' -> '/C/'?
+
 
 
 if __name__ == "__main__":

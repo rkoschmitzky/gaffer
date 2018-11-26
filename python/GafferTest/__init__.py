@@ -95,7 +95,7 @@ from SequencePathTest import SequencePathTest
 from WeakMethodTest import WeakMethodTest
 from StringInOutNode import StringInOutNode
 from StringPlugTest import StringPlugTest
-from FileSystemPathInOutNode import FileSystemPathInOut
+from FileSystemPathInOutNode import FileSystemPathInOutNode
 from FileSystemPathPlugTest import FileSystemPathPlugTest
 from ContextVariablesTest import ContextVariablesTest
 from DeleteContextVariablesTest import DeleteContextVariablesTest
