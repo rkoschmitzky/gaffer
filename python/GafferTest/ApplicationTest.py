@@ -36,7 +36,10 @@
 
 import os
 import time
-import subprocess32 as subprocess
+if os.name == 'posix' and sys.version_info[0] < 3:
+    import subprocess32 as subprocess
+else:
+    import subprocess
 
 import IECore
 import Gaffer
