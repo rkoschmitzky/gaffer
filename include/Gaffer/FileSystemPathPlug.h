@@ -84,6 +84,11 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 		/// with care!
 		std::string getValue( const IECore::MurmurHash *precomputedHash = nullptr ) const;
 
+		IECore::MurmurHash hash() const override;
+		/// Ensures the method above doesn't mask
+		/// ValuePlug::hash( h )
+		using ValuePlug::hash;
+
 	private :
 
 		unsigned m_substitutions;

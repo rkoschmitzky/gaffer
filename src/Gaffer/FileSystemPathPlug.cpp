@@ -36,6 +36,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "Gaffer/FileSystemPathPlug.h"
+#include "Gaffer/FileSystemPath.h"
 
 #include "Gaffer/Context.h"
 #include "Gaffer/Process.h"
@@ -93,6 +94,8 @@ std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedH
 		Process::current() &&
 		Context::hasSubstitutions( s->readable() )
 	;
-
-	return performSubstitutions ? Context::current()->substitute( s->readable(), m_substitutions ) : s->readable();
+	return performSubstitutions ? Context::current()->substitute(s->readable(), m_substitutions) : s->readable();
+	//Gaffer::FileSystemPath p = Gaffer::FileSystemPath(sub_p);
+	//return p.string();
+	//return sub_p;
 }
