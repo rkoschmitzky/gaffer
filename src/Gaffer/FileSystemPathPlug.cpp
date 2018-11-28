@@ -37,6 +37,7 @@
 
 #include "Gaffer/FileSystemPathPlug.h"
 #include "Gaffer/FileSystemPath.h"
+#include "Gaffer/PathFilter.h"
 
 #include "Gaffer/Context.h"
 #include "Gaffer/Process.h"
@@ -53,7 +54,7 @@ FileSystemPathPlug::FileSystemPathPlug(
 	unsigned flags,
 	unsigned substitutions
 )
-	:	StringPlug( name, direction, defaultValue, flags ), m_substitutions( substitutions )
+	:	StringPlug( name, direction, defaultValue, flags, substitutions )
 {
 }
 
@@ -85,7 +86,7 @@ std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedH
 	const IECore::StringData *s = IECore::runTimeCast<const IECore::StringData>( o.get() );
 	if( !s )
 	{
-		throw IECore::Exception( "StringPlug::getObjectValue() didn't return StringData - is the hash being computed correctly?" );
+		throw IECore::Exception( "FileSystemPathPlug::getObjectValue() didn't return StringData - is the hash being computed correctly?" );
 	}
 
 	const bool performSubstitutions =
@@ -94,8 +95,6 @@ std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedH
 		Process::current() &&
 		Context::hasSubstitutions( s->readable() )
 	;
-	return performSubstitutions ? Context::current()->substitute(s->readable(), m_substitutions) : s->readable();
-	//Gaffer::FileSystemPath p = Gaffer::FileSystemPath(sub_p);
-	//return p.string();
-	//return sub_p;
+	std::string substituted_path = performSubstitutions ? Context::current()->substitute(s->readable(), m_substitutions) : s->readable();
+	return Gaffer::FileSystemPath(substituted_path).nativeString();
 }

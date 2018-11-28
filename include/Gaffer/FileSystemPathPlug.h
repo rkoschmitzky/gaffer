@@ -41,6 +41,7 @@
 #include "Gaffer/Context.h"
 #include "Gaffer/StringPlug.h"
 
+
 namespace Gaffer
 {
 
@@ -83,11 +84,6 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 		/// for details of the optional precomputedHash argument - and use
 		/// with care!
 		std::string getValue( const IECore::MurmurHash *precomputedHash = nullptr ) const;
-
-		IECore::MurmurHash hash() const override;
-		/// Ensures the method above doesn't mask
-		/// ValuePlug::hash( h )
-		using ValuePlug::hash;
 
 	private :
 
