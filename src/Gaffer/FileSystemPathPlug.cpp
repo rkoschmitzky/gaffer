@@ -70,7 +70,7 @@ bool FileSystemPathPlug::acceptsInput( const Plug *input ) const
 	}
 	if( input )
 	{
-		return input->isInstanceOf( StringPlug::staticTypeId() );
+		return input->isInstanceOf( staticTypeId() ) || input->isInstanceOf( StringPlug::staticTypeId() );
 	}
 	return true;
 }
