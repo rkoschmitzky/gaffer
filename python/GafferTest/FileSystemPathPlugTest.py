@@ -46,6 +46,19 @@ import GafferTest
 
 class FileSystemPathPlugTest( GafferTest.TestCase ) :
 
+	def testInputPlug( self ) :
+		n = GafferTest.FileSystemPathInOutNode()
+		self.assertHashesValid( n )
+
+		n["in"].setValue( "C:/path/test.exr" )
+		self.assertEqual( n["out"].getValue(), "C:\\path\\test.exr" )
+
+		n2 = GafferTest.FileSystemPathInOutNode()
+		self.assertHashesValid( n2 )
+
+		n2["in"].setInput( n["out"] )
+		self.assertEqual( n2["out"].getValue(), "C:\\path\\test.exr" )
+
 	def testGenericToWindows( self ) :
 		if os.name == "nt":
 			n = GafferTest.FileSystemPathInOutNode()
@@ -78,7 +91,7 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 
 	def testTildeExpansion( self ) :
 
-		n = GafferTest.StringInOutNode()
+		n = GafferTest.FileSystemPathInOutNode()
 
 		n["in"].setValue( "~" )
 		self.assertEqual( n["out"].getValue(), os.path.expanduser( "~" ) )
@@ -93,7 +106,7 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 
 	def testEnvironmentExpansion( self ) :
 
-		n = GafferTest.StringInOutNode()
+		n = GafferTest.FileSystemPathInOutNode()
 
 		n["in"].setValue( "${NOT_AN_ENVIRONMENT_VARIABLE}" )
 		h1 = n["out"].hash()
@@ -117,10 +130,10 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 		s = Gaffer.ScriptNode()
 
 		# Should output a substituted version of the input.
-		s["substitionsOn"] = GafferTest.StringInOutNode()
+		s["substitionsOn"] = GafferTest.FileSystemPathInOutNode()
 
 		# Should pass through the input directly, without substitutions.
-		s["substitionsOff"] = GafferTest.StringInOutNode( substitutions = Gaffer.Context.Substitutions.NoSubstitutions )
+		s["substitionsOff"] = GafferTest.FileSystemPathInOutNode( substitutions = Gaffer.Context.Substitutions.NoSubstitutions )
 
 		# The third case is trickier. The "in" plug on the node
 		# itself requests no substitutions, but it receives its
@@ -138,8 +151,8 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 		# nodes that know when a substitution is relevant, and the
 		# user shouldn't be burdened with the job of thinking about
 		# them when making intermediate connections to that node.
-		s["substitionsOnIndirectly"] = GafferTest.StringInOutNode( substitutions = Gaffer.Context.Substitutions.NoSubstitutions )
-		s["substitionsOnIndirectly"]["user"]["in"] = Gaffer.StringPlug()
+		s["substitionsOnIndirectly"] = GafferTest.FileSystemPathInOutNode( substitutions = Gaffer.Context.Substitutions.NoSubstitutions )
+		s["substitionsOnIndirectly"]["user"]["in"] = Gaffer.FileSystemPathPlug()
 		s["substitionsOnIndirectly"]["in"].setInput( s["substitionsOnIndirectly"]["user"]["in"] )
 
 		# All three nodes above receive their input from this expression
