@@ -80,6 +80,14 @@ PlugPtr FileSystemPathPlug::createCounterpart( const std::string &name, Directio
 	return new FileSystemPathPlug( name, direction, defaultValue(), getFlags(), substitutions() );
 }
 
+void FileSystemPathPlug::setValue(const std::string &value)
+{
+	// Set the value to the generic string representation
+	// This helps when calling getValue since it won't remove
+	// back slashes when calling substitute
+	setObjectValue(new StringData(Gaffer::FileSystemPath(value).string()));
+}
+
 std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedHash ) const
 {
 	IECore::ConstObjectPtr o = getObjectValue( precomputedHash );
@@ -90,11 +98,11 @@ std::string FileSystemPathPlug::getValue( const IECore::MurmurHash *precomputedH
 	}
 
 	const bool performSubstitutions =
-		m_substitutions &&
+		substitutions() &&
 		direction() == In &&
 		Process::current() &&
 		Context::hasSubstitutions( s->readable() )
 	;
-	std::string substituted_path = performSubstitutions ? Context::current()->substitute(s->readable(), m_substitutions) : s->readable();
+	std::string substituted_path = performSubstitutions ? Context::current()->substitute(s->readable(), substitutions()) : s->readable();
 	return Gaffer::FileSystemPath(substituted_path).nativeString();
 }

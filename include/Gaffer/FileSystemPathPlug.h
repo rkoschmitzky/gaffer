@@ -71,7 +71,7 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 			Direction direction=In,
 			const std::string &defaultValue = "",
 			unsigned flags = Default,
-			unsigned substitutions = Context::AllSubstitutions
+			unsigned substitutions = Context::AllSubstitutions & ~Context::FrameSubstitutions
 		);
 		~FileSystemPathPlug() override;
 
@@ -80,14 +80,12 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 		bool acceptsInput( const Plug *input ) const override;
 		PlugPtr createCounterpart( const std::string &name, Direction direction ) const override;
 
+		/// \undoable
+		void setValue(const std::string &value);
 		/// Returns the value. See comments in TypedObjectPlug::getValue()
 		/// for details of the optional precomputedHash argument - and use
 		/// with care!
 		std::string getValue( const IECore::MurmurHash *precomputedHash = nullptr ) const;
-
-	private :
-
-		unsigned m_substitutions;
 
 };
 
