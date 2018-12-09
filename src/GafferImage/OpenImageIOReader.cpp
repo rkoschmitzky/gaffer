@@ -525,7 +525,8 @@ FilePtr retrieveFile( std::string &fileName, OpenImageIOReader::MissingFrameMode
 		return nullptr;
 	}
 
-	const std::string resolvedFileName = context->substitute( fileName );
+	// All other substitutions are handled in the FileSystemPathPlug
+	const std::string resolvedFileName = context->substitute( fileName, Gaffer::Context::Substitutions::FrameSubstitutions );
 
 	FileHandleCache *cache = fileCache();
 	CacheEntry cacheEntry = cache->get( resolvedFileName );
@@ -589,8 +590,7 @@ OpenImageIOReader::OpenImageIOReader( const std::string &name )
 	addChild(
 		new FileSystemPathPlug(
 			"fileName", Plug::In, "",
-			/* flags */ Plug::Default,
-			/* substitutions */ Context::AllSubstitutions & ~Context::FrameSubstitutions
+			/* flags */ Plug::Default
 		)
 	);
 	addChild( new IntPlug( "refreshCount" ) );
