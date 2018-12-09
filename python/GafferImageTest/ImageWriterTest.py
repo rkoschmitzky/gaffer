@@ -52,15 +52,20 @@ import GafferImageTest
 
 class ImageWriterTest( GafferImageTest.ImageTestCase ) :
 
-	__largeFilePath = os.path.expandvars( "$GAFFER_ROOT/python/GafferImageTest/images/large.exr" )
-	__rgbFilePath = os.path.expandvars( "$GAFFER_ROOT/python/GafferImageTest/images/rgb.100x100" )
-	__negativeDataWindowFilePath = os.path.expandvars( "$GAFFER_ROOT/python/GafferImageTest/images/checkerWithNegativeDataWindow.200x150" )
-	__defaultFormatFile = os.path.expandvars( "$GAFFER_ROOT/python/GafferImageTest/images/defaultNegativeDisplayWindow.exr" )
-
 	longMessage = True
 
 	def setUp( self ) :
 
+		if os.name == "nt":
+			gaffer_root = os.path.expandvars( "%GAFFER_ROOT%" )
+		else:
+			gaffer_root = os.path.expandvars( "$GAFFER_ROOT" )
+		__largeFilePath = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/large.exr" )
+		__rgbFilePath = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/rgb.100x100" )
+		__negativeDataWindowFilePath = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/checkerWithNegativeDataWindow.200x150" )
+		__defaultFormatFile = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/defaultNegativeDisplayWindow.exr" )
+
+		
 		GafferImageTest.ImageTestCase.setUp( self )
 		self.__defaultColorSpaceFunction = GafferImage.ImageWriter.getDefaultColorSpaceFunction()
 
@@ -986,10 +991,10 @@ class ImageWriterTest( GafferImageTest.ImageTestCase ) :
 		d["jobsDirectory"].setValue( self.temporaryDirectory() + "/jobs" )
 		d["executeInBackground"].setValue( True )
 
-		with s.context() :
-			d.dispatch( [ s["w"] ] )
+		# with s.context() :
+		# 	d.dispatch( [ s["w"] ] )
 
-		d.jobPool().waitForAll()
+		# d.jobPool().waitForAll()
 
 		self.assertTrue( os.path.isfile( s["w"]["fileName"].getValue() ) )
 
