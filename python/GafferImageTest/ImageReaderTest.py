@@ -55,9 +55,9 @@ class ImageReaderTest( GafferImageTest.ImageTestCase ) :
 			gaffer_root = os.path.expandvars( "$GAFFER_ROOT" )
 
 		self.fileName = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/circles.exr" )
-		self.colorSpaceFileName = os.path.abspath( gaffer_root + "$GAFFER_ROOT/python/GafferImageTest/images/circles_as_cineon.exr" )
-		self.offsetDataWindowFileName = os.path.abspath( gaffer_root + "$GAFFER_ROOT/python/GafferImageTest/images/rgb.100x100.exr" )
-		self.jpgFileName = os.path.abspath( gaffer_root + "$GAFFER_ROOT/python/GafferImageTest/images/circles.jpg" )
+		self.colorSpaceFileName = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/circles_as_cineon.exr" )
+		self.offsetDataWindowFileName = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/rgb.100x100.exr" )
+		self.jpgFileName = os.path.abspath( gaffer_root + "/python/GafferImageTest/images/circles.jpg" )
 
 		GafferImageTest.ImageTestCase.setUp( self )
 		self.__defaultColorSpaceFunction = GafferImage.ImageReader.getDefaultColorSpaceFunction()
@@ -73,7 +73,7 @@ class ImageReaderTest( GafferImageTest.ImageTestCase ) :
 		n["fileName"].setValue( self.fileName )
 
 		oiio = GafferImage.OpenImageIOReader()
-		oiio["fileName"].setValue( self.fileName.replace("\\", "\\\\") )
+		oiio["fileName"].setValue( self.fileName )
 
 		self.assertEqual( n["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
 		self.assertEqual( n["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
@@ -82,386 +82,386 @@ class ImageReaderTest( GafferImageTest.ImageTestCase ) :
 		self.assertEqual( n["out"].channelData( "R", imath.V2i( 0 ) ),oiio["out"].channelData( "R", imath.V2i( 0 ) ) )
 		self.assertImagesEqual( n["out"], oiio["out"] )
 
-	# def testUnspecifiedFilename( self ) :
+	def testUnspecifiedFilename( self ) :
 
-	# 	n = GafferImage.ImageReader()
-	# 	n["out"]["channelNames"].getValue()
-	# 	self.assertTrue( GafferImage.BufferAlgo.empty( n["out"]['dataWindow'].getValue() ) )
+		n = GafferImage.ImageReader()
+		n["out"]["channelNames"].getValue()
+		self.assertTrue( GafferImage.BufferAlgo.empty( n["out"]['dataWindow'].getValue() ) )
 
 
-	# def testChannelDataHashes( self ) :
-	# 	# Test that two tiles within the same image have different hashes.
-	# 	n = GafferImage.ImageReader()
-	# 	n["fileName"].setValue( self.fileName )
-	# 	h1 = n["out"].channelData( "R", imath.V2i( 0 ) ).hash()
-	# 	h2 = n["out"].channelData( "R", imath.V2i( GafferImage.ImagePlug().tileSize() ) ).hash()
+	def testChannelDataHashes( self ) :
+		# Test that two tiles within the same image have different hashes.
+		n = GafferImage.ImageReader()
+		n["fileName"].setValue( self.fileName )
+		h1 = n["out"].channelData( "R", imath.V2i( 0 ) ).hash()
+		h2 = n["out"].channelData( "R", imath.V2i( GafferImage.ImagePlug().tileSize() ) ).hash()
 
-	# 	self.assertNotEqual( h1, h2 )
+		self.assertNotEqual( h1, h2 )
 
-	# def testColorSpaceOverride( self ) :
+	def testColorSpaceOverride( self ) :
 
-	# 	exrReader = GafferImage.ImageReader()
-	# 	exrReader["fileName"].setValue( self.fileName )
-	# 	exrReader["colorSpace"].setValue( "Cineon" )
+		exrReader = GafferImage.ImageReader()
+		exrReader["fileName"].setValue( self.fileName )
+		exrReader["colorSpace"].setValue( "Cineon" )
 
-	# 	colorSpaceOverrideReader = GafferImage.ImageReader()
-	# 	colorSpaceOverrideReader["fileName"].setValue( self.colorSpaceFileName )
+		colorSpaceOverrideReader = GafferImage.ImageReader()
+		colorSpaceOverrideReader["fileName"].setValue( self.colorSpaceFileName )
 
-	# 	exrImage = exrReader["out"]
-	# 	colorSpaceOverrideImage = colorSpaceOverrideReader["out"]
+		exrImage = exrReader["out"]
+		colorSpaceOverrideImage = colorSpaceOverrideReader["out"]
 
-	# 	self.assertImagesEqual( colorSpaceOverrideImage, exrImage, ignoreMetadata = True, maxDifference = 0.005 )
+		self.assertImagesEqual( colorSpaceOverrideImage, exrImage, ignoreMetadata = True, maxDifference = 0.005 )
 
-	# def testJpgRead( self ) :
+	def testJpgRead( self ) :
 
-	# 	exrReader = GafferImage.ImageReader()
-	# 	exrReader["fileName"].setValue( self.fileName )
+		exrReader = GafferImage.ImageReader()
+		exrReader["fileName"].setValue( self.fileName )
 
-	# 	jpgReader = GafferImage.ImageReader()
-	# 	jpgReader["fileName"].setValue( self.jpgFileName )
+		jpgReader = GafferImage.ImageReader()
+		jpgReader["fileName"].setValue( self.jpgFileName )
 
-	# 	self.assertImagesEqual( exrReader["out"], jpgReader["out"], ignoreMetadata = True, maxDifference = 0.001 )
+		self.assertImagesEqual( exrReader["out"], jpgReader["out"], ignoreMetadata = True, maxDifference = 0.001 )
 
-	# def testSupportedExtensions( self ) :
+	def testSupportedExtensions( self ) :
 
-	# 	self.assertEqual( GafferImage.ImageReader.supportedExtensions(), GafferImage.OpenImageIOReader.supportedExtensions() )
+		self.assertEqual( GafferImage.ImageReader.supportedExtensions(), GafferImage.OpenImageIOReader.supportedExtensions() )
 
-	# def testFileRefresh( self ) :
+	def testFileRefresh( self ) :
 
-	# 	testFile = self.temporaryDirectory() + "/refresh.exr"
-	# 	shutil.copyfile( self.fileName, testFile )
+		testFile = self.temporaryDirectory() + "/refresh.exr"
+		shutil.copyfile( self.fileName, testFile )
 
-	# 	reader = GafferImage.ImageReader()
-	# 	reader["fileName"].setValue( testFile )
-	# 	image1 = reader["out"].image()
+		reader = GafferImage.ImageReader()
+		reader["fileName"].setValue( testFile )
+		image1 = reader["out"].image()
 
-	# 	# even though we've change the image on disk, gaffer will
-	# 	# still have the old one in its cache.
-	# 	shutil.copyfile( self.jpgFileName, testFile )
-	# 	self.assertEqual( reader["out"].image(), image1 )
+		# even though we've change the image on disk, gaffer will
+		# still have the old one in its cache.
+		shutil.copyfile( self.jpgFileName, testFile )
+		self.assertEqual( reader["out"].image(), image1 )
 
-	# 	# until we force a refresh
-	# 	reader["refreshCount"].setValue( reader["refreshCount"].getValue() + 1 )
-	# 	self.assertNotEqual( reader["out"].image(), image1 )
+		# until we force a refresh
+		reader["refreshCount"].setValue( reader["refreshCount"].getValue() + 1 )
+		self.assertNotEqual( reader["out"].image(), image1 )
 
-	# def testNonexistentFiles( self ) :
+	def testNonexistentFiles( self ) :
 
-	# 	reader = GafferImage.ImageReader()
-	# 	reader["fileName"].setValue( "wellIDontExist.exr" )
+		reader = GafferImage.ImageReader()
+		reader["fileName"].setValue( "wellIDontExist.exr" )
 
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"].image )
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["format"].getValue )
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["dataWindow"].getValue )
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["metadata"].getValue )
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["channelNames"].getValue )
-	# 	self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
-
-	# def testMissingFrameMode( self ) :
-
-	# 	testSequence = IECore.FileSequence( self.temporaryDirectory() + "/incompleteSequence.####.exr" )
-	# 	shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 1 ) )
-	# 	shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 3 ) )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"].image )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["format"].getValue )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["dataWindow"].getValue )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["metadata"].getValue )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"]["channelNames"].getValue )
+		self.assertRaisesRegexp( RuntimeError, ".*wellIDontExist.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
+
+	def testMissingFrameMode( self ) :
+
+		testSequence = IECore.FileSequence( self.temporaryDirectory() + "/incompleteSequence.####.exr" )
+		shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 1 ) )
+		shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 3 ) )
 
-	# 	reader = GafferImage.ImageReader()
-	# 	reader["fileName"].setValue( testSequence.fileName )
-
-	# 	oiio = GafferImage.OpenImageIOReader()
-	# 	oiio["fileName"].setValue( testSequence.fileName )
-
-	# 	def assertMatch() :
-
-	# 		self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
-	# 		self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
-	# 		self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
-	# 		self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
-
-	# 		# It is only valid to query the data inside the data window
-	# 		if not GafferImage.BufferAlgo.empty( reader["out"]["dataWindow"].getValue() ):
-	# 			self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), oiio["out"].channelData( "R", imath.V2i( 0 ) ) )
-	# 		self.assertImagesEqual( reader["out"], oiio["out"] )
-
-	# 	context = Gaffer.Context()
-
-	# 	# set to a missing frame
-	# 	context.setFrame( 2 )
-
-	# 	# everything throws
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Error )
-	# 	with context :
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["dataWindow"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["metadata"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["channelNames"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
-
-	# 	# Hold mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# Black mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# set to a different missing frame
-	# 	context.setFrame( 4 )
-
-	# 	# Hold mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# Black mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# set to a missing frame before the start of the sequence
-	# 	context.setFrame( 0 )
-
-	# 	# Hold mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# Black mode matches OpenImageIOReader
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
-	# 	with context :
-	# 		assertMatch()
-
-	# 	# explicit fileNames do not support MissingFrameMode
-	# 	reader["fileName"].setValue( testSequence.fileNameForFrame( 0 ) )
-	# 	reader["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
-	# 	with context :
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["dataWindow"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["metadata"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["channelNames"].getValue )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
-
-	# 	reader["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
-	# 	with context :
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
-	# 		self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
-	# 		self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
-	# 		self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
-	# 		self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
-	# 		self.assertTrue( GafferImage.BufferAlgo.empty( reader["out"]['dataWindow'].getValue() ) )
-	# 		self.assertTrue( GafferImage.BufferAlgo.empty( oiio["out"]['dataWindow'].getValue() ) )
-
-	# def testFrameRangeMask( self ) :
-
-	# 	testSequence = IECore.FileSequence( self.temporaryDirectory() + "/incompleteSequence.####.exr" )
-	# 	shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 1 ) )
-	# 	shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 3 ) )
-	# 	shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 5 ) )
-	# 	shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 7 ) )
-
-	# 	reader = GafferImage.ImageReader()
-	# 	reader["fileName"].setValue( testSequence.fileName )
-	# 	reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
-
-	# 	oiio = GafferImage.OpenImageIOReader()
-	# 	oiio["fileName"].setValue( testSequence.fileName )
-	# 	oiio["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
-
-	# 	context = Gaffer.Context()
-
-	# 	# make sure the tile we're comparing isn't black
-	# 	# so we can tell if BlackOutside is working.
-	# 	blackTile = IECore.FloatVectorData( [ 0 ] * GafferImage.ImagePlug.tileSize() * GafferImage.ImagePlug.tileSize() )
-	# 	with context :
-	# 		for i in range( 1, 11 ) :
-	# 			context.setFrame( i )
-	# 			self.assertNotEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), blackTile )
-
-	# 	def assertBlack() :
-
-	# 		# format and data window still match
-	# 		self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
-	# 		self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
-	# 		self.assertNotEqual( reader["out"].image(), oiio["out"].image() )
-	# 		# the metadata and channel names are at the defaults
-	# 		self.assertEqual( reader["out"]["metadata"].getValue(), reader["out"]["metadata"].defaultValue() )
-	# 		self.assertEqual( reader["out"]["channelNames"].getValue(), reader["out"]["channelNames"].defaultValue() )
-	# 		# channel data is black
-	# 		self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), blackTile )
-
-	# 	def assertMatch() :
-
-	# 		self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
-	# 		self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
-	# 		self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
-	# 		self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
-	# 		self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), oiio["out"].channelData( "R", imath.V2i( 0 ) ) )
-	# 		self.assertImagesEqual( reader["out"], oiio["out"] )
-
-	# 	def assertHold( holdFrame ) :
-
-	# 		context = Gaffer.Context()
-	# 		context.setFrame( holdFrame )
-	# 		with context :
-	# 			holdImage = reader["out"].image()
-	# 			holdFormat = reader["out"]["format"].getValue()
-	# 			holdDataWindow = reader["out"]["dataWindow"].getValue()
-	# 			holdMetadata = reader["out"]["metadata"].getValue()
-	# 			holdChannelNames = reader["out"]["channelNames"].getValue()
-	# 			holdTile = reader["out"].channelData( "R", imath.V2i( 0 ) )
-
-	# 		self.assertEqual( reader["out"]["format"].getValue(), holdFormat )
-	# 		self.assertEqual( reader["out"]["dataWindow"].getValue(), holdDataWindow )
-	# 		self.assertEqual( reader["out"]["metadata"].getValue(), holdMetadata )
-	# 		self.assertEqual( reader["out"]["channelNames"].getValue(), holdChannelNames )
-	# 		self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), holdTile )
-	# 		self.assertEqual( reader["out"].image(), holdImage )
-
-	# 	reader["start"]["frame"].setValue( 4 )
-	# 	reader["end"]["frame"].setValue( 7 )
-
-	# 	# frame 0 errors, match from 1-10
-	# 	reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.None )
-	# 	reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.None )
-	# 	with context :
-
-	# 		for i in range( 0, 11 ) :
-	# 			context.setFrame( i )
-	# 			assertMatch()
-
-	# 	# black from 0-3, match from 4-10
-	# 	reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.BlackOutside )
-	# 	with context :
-
-	# 		for i in range( 0, 4 ) :
-	# 			context.setFrame( i )
-	# 			assertBlack()
-
-	# 		for i in range( 4, 11 ) :
-	# 			context.setFrame( i )
-	# 			assertMatch()
-
-	# 	# black from 0-3, match from 4-7, black from 8-10
-	# 	reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.BlackOutside )
-	# 	with context :
-
-	# 		for i in range( 0, 4 ) :
-	# 			context.setFrame( i )
-	# 			assertBlack()
-
-	# 		for i in range( 4, 8 ) :
-	# 			context.setFrame( i )
-	# 			assertMatch()
-
-	# 		for i in range( 8, 11 ) :
-	# 			context.setFrame( i )
-	# 			assertBlack()
-
-	# 	# hold frame 4 from 0-3, match from 4-7, black from 8-10
-	# 	reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.ClampToFrame )
-	# 	with context :
-
-	# 		for i in range( 0, 4 ) :
-	# 			context.setFrame( i )
-	# 			assertHold( 4 )
-
-	# 		for i in range( 4, 8 ) :
-	# 			context.setFrame( i )
-	# 			assertMatch()
-
-	# 		for i in range( 8, 11 ) :
-	# 			context.setFrame( i )
-	# 			assertBlack()
-
-	# 	# hold frame 4 from 0-3, match from 4-7, hold frame 7 from 8-10
-	# 	reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.ClampToFrame )
-	# 	with context :
-
-	# 		for i in range( 0, 4 ) :
-	# 			context.setFrame( i )
-	# 			assertHold( 4 )
-
-	# 		for i in range( 4, 8 ) :
-	# 			context.setFrame( i )
-	# 			assertMatch()
-
-	# 		for i in range( 8, 11 ) :
-	# 			context.setFrame( i )
-	# 			assertHold( 7 )
-
-	# def testDefaultColorSpaceFunctionArguments( self ) :
-
-	# 	# Make a network to write and read an image
-	# 	# in various formats.
-
-	# 	c = GafferImage.Constant()
-	# 	c["format"].setValue( GafferImage.Format( 64, 64 ) )
-
-	# 	w = GafferImage.ImageWriter()
-	# 	w["in"].setInput( c["out"] )
-
-	# 	r = GafferImage.ImageReader()
-	# 	r["fileName"].setInput( w["fileName"] )
-
-	# 	# Register a custom colorspace function that
-	# 	# just captures its arguments.
-
-	# 	capturedArguments = {}
-	# 	def f( fileName, fileFormat, dataType, metadata ) :
-
-	# 		capturedArguments.update(
-	# 			{
-	# 				"fileName" : fileName,
-	# 				"fileFormat" : fileFormat,
-	# 				"dataType" : dataType,
-	# 				"metadata" : metadata,
-	# 			}
-	# 		)
-	# 		return "linear"
-
-	# 	GafferImage.ImageReader.setDefaultColorSpaceFunction( f )
-
-	# 	# Verify that the correct arguments are passed for
-	# 	# a variety of fileNames and dataTypes.
-
-	# 	for ext, fileFormat, dataType in [
-	# 		( "exr", "openexr", "half" ),
-	# 		( "dpx", "dpx", "uint12" ),
-	# 		( "TIFF", "tiff", "float" ),
-	# 		( "tif", "tiff", "uint32" ),
-	# 	] :
-
-	# 		w["fileName"].setValue( "{0}/{1}.{2}".format( self.temporaryDirectory(), dataType, ext ) )
-	# 		w[fileFormat]["dataType"].setValue( dataType )
-	# 		w.execute()
-
-	# 		capturedArguments.clear()
-	# 		r["out"].channelData( "R", imath.V2i( 0 ) ) # Triggers call to color space function
-
-	# 		self.assertEqual( len( capturedArguments ), 4 )
-	# 		self.assertEqual( capturedArguments["fileName"], w["fileName"].getValue() )
-	# 		self.assertEqual( capturedArguments["fileFormat"], fileFormat )
-	# 		self.assertEqual( capturedArguments["dataType"], dataType )
-	# 		self.assertEqual( capturedArguments["metadata"], r["out"]["metadata"].getValue() )
-
-	# def testDisabling( self ) :
-
-	# 	reader = GafferImage.ImageReader()
-	# 	reader["fileName"].setValue( self.fileName )
-	# 	reader["enabled"].setValue( False )
-
-	# 	constant = GafferImage.Constant()
-	# 	constant["enabled"].setValue( False )
-
-	# 	self.assertImagesEqual( reader["out"], constant["out"] )
+		reader = GafferImage.ImageReader()
+		reader["fileName"].setValue( testSequence.fileName )
+
+		oiio = GafferImage.OpenImageIOReader()
+		oiio["fileName"].setValue( testSequence.fileName )
+
+		def assertMatch() :
+
+			self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
+			self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
+			self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
+			self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
+
+			# It is only valid to query the data inside the data window
+			if not GafferImage.BufferAlgo.empty( reader["out"]["dataWindow"].getValue() ):
+				self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), oiio["out"].channelData( "R", imath.V2i( 0 ) ) )
+			self.assertImagesEqual( reader["out"], oiio["out"] )
+
+		context = Gaffer.Context()
+
+		# set to a missing frame
+		context.setFrame( 2 )
+
+		# everything throws
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Error )
+		with context :
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["dataWindow"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["metadata"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["channelNames"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
+
+		# Hold mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
+		with context :
+			assertMatch()
+
+		# Black mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
+		with context :
+			assertMatch()
+
+		# set to a different missing frame
+		context.setFrame( 4 )
+
+		# Hold mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
+		with context :
+			assertMatch()
+
+		# Black mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
+		with context :
+			assertMatch()
+
+		# set to a missing frame before the start of the sequence
+		context.setFrame( 0 )
+
+		# Hold mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
+		with context :
+			assertMatch()
+
+		# Black mode matches OpenImageIOReader
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Black )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
+		with context :
+			assertMatch()
+
+		# explicit fileNames do not support MissingFrameMode
+		reader["fileName"].setValue( testSequence.fileNameForFrame( 0 ) )
+		reader["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Hold )
+		with context :
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["dataWindow"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["metadata"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["channelNames"].getValue )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].channelData, "R", imath.V2i( 0 ) )
+
+		reader["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
+		oiio["missingFrameMode"].setValue( GafferImage.OpenImageIOReader.MissingFrameMode.Black )
+		with context :
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"].image )
+			self.assertRaisesRegexp( RuntimeError, ".*incompleteSequence.*.exr.*", reader["out"]["format"].getValue )
+			self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
+			self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
+			self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
+			self.assertTrue( GafferImage.BufferAlgo.empty( reader["out"]['dataWindow'].getValue() ) )
+			self.assertTrue( GafferImage.BufferAlgo.empty( oiio["out"]['dataWindow'].getValue() ) )
+
+	def testFrameRangeMask( self ) :
+
+		testSequence = IECore.FileSequence( self.temporaryDirectory() + "/incompleteSequence.####.exr" )
+		shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 1 ) )
+		shutil.copyfile( self.fileName, testSequence.fileNameForFrame( 3 ) )
+		shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 5 ) )
+		shutil.copyfile( self.offsetDataWindowFileName, testSequence.fileNameForFrame( 7 ) )
+
+		reader = GafferImage.ImageReader()
+		reader["fileName"].setValue( testSequence.fileName )
+		reader["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
+
+		oiio = GafferImage.OpenImageIOReader()
+		oiio["fileName"].setValue( testSequence.fileName )
+		oiio["missingFrameMode"].setValue( GafferImage.ImageReader.MissingFrameMode.Hold )
+
+		context = Gaffer.Context()
+
+		# make sure the tile we're comparing isn't black
+		# so we can tell if BlackOutside is working.
+		blackTile = IECore.FloatVectorData( [ 0 ] * GafferImage.ImagePlug.tileSize() * GafferImage.ImagePlug.tileSize() )
+		with context :
+			for i in range( 1, 11 ) :
+				context.setFrame( i )
+				self.assertNotEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), blackTile )
+
+		def assertBlack() :
+
+			# format and data window still match
+			self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
+			self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
+			self.assertNotEqual( reader["out"].image(), oiio["out"].image() )
+			# the metadata and channel names are at the defaults
+			self.assertEqual( reader["out"]["metadata"].getValue(), reader["out"]["metadata"].defaultValue() )
+			self.assertEqual( reader["out"]["channelNames"].getValue(), reader["out"]["channelNames"].defaultValue() )
+			# channel data is black
+			self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), blackTile )
+
+		def assertMatch() :
+
+			self.assertEqual( reader["out"]["format"].getValue(), oiio["out"]["format"].getValue() )
+			self.assertEqual( reader["out"]["dataWindow"].getValue(), oiio["out"]["dataWindow"].getValue() )
+			self.assertEqual( reader["out"]["metadata"].getValue(), oiio["out"]["metadata"].getValue() )
+			self.assertEqual( reader["out"]["channelNames"].getValue(), oiio["out"]["channelNames"].getValue() )
+			self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), oiio["out"].channelData( "R", imath.V2i( 0 ) ) )
+			self.assertImagesEqual( reader["out"], oiio["out"] )
+
+		def assertHold( holdFrame ) :
+
+			context = Gaffer.Context()
+			context.setFrame( holdFrame )
+			with context :
+				holdImage = reader["out"].image()
+				holdFormat = reader["out"]["format"].getValue()
+				holdDataWindow = reader["out"]["dataWindow"].getValue()
+				holdMetadata = reader["out"]["metadata"].getValue()
+				holdChannelNames = reader["out"]["channelNames"].getValue()
+				holdTile = reader["out"].channelData( "R", imath.V2i( 0 ) )
+
+			self.assertEqual( reader["out"]["format"].getValue(), holdFormat )
+			self.assertEqual( reader["out"]["dataWindow"].getValue(), holdDataWindow )
+			self.assertEqual( reader["out"]["metadata"].getValue(), holdMetadata )
+			self.assertEqual( reader["out"]["channelNames"].getValue(), holdChannelNames )
+			self.assertEqual( reader["out"].channelData( "R", imath.V2i( 0 ) ), holdTile )
+			self.assertEqual( reader["out"].image(), holdImage )
+
+		reader["start"]["frame"].setValue( 4 )
+		reader["end"]["frame"].setValue( 7 )
+
+		# frame 0 errors, match from 1-10
+		reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.None )
+		reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.None )
+		with context :
+
+			for i in range( 0, 11 ) :
+				context.setFrame( i )
+				assertMatch()
+
+		# black from 0-3, match from 4-10
+		reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.BlackOutside )
+		with context :
+
+			for i in range( 0, 4 ) :
+				context.setFrame( i )
+				assertBlack()
+
+			for i in range( 4, 11 ) :
+				context.setFrame( i )
+				assertMatch()
+
+		# black from 0-3, match from 4-7, black from 8-10
+		reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.BlackOutside )
+		with context :
+
+			for i in range( 0, 4 ) :
+				context.setFrame( i )
+				assertBlack()
+
+			for i in range( 4, 8 ) :
+				context.setFrame( i )
+				assertMatch()
+
+			for i in range( 8, 11 ) :
+				context.setFrame( i )
+				assertBlack()
+
+		# hold frame 4 from 0-3, match from 4-7, black from 8-10
+		reader["start"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.ClampToFrame )
+		with context :
+
+			for i in range( 0, 4 ) :
+				context.setFrame( i )
+				assertHold( 4 )
+
+			for i in range( 4, 8 ) :
+				context.setFrame( i )
+				assertMatch()
+
+			for i in range( 8, 11 ) :
+				context.setFrame( i )
+				assertBlack()
+
+		# hold frame 4 from 0-3, match from 4-7, hold frame 7 from 8-10
+		reader["end"]["mode"].setValue( GafferImage.ImageReader.FrameMaskMode.ClampToFrame )
+		with context :
+
+			for i in range( 0, 4 ) :
+				context.setFrame( i )
+				assertHold( 4 )
+
+			for i in range( 4, 8 ) :
+				context.setFrame( i )
+				assertMatch()
+
+			for i in range( 8, 11 ) :
+				context.setFrame( i )
+				assertHold( 7 )
+
+	def testDefaultColorSpaceFunctionArguments( self ) :
+
+		# Make a network to write and read an image
+		# in various formats.
+
+		c = GafferImage.Constant()
+		c["format"].setValue( GafferImage.Format( 64, 64 ) )
+
+		w = GafferImage.ImageWriter()
+		w["in"].setInput( c["out"] )
+
+		r = GafferImage.ImageReader()
+		r["fileName"].setInput( w["fileName"] )
+
+		# Register a custom colorspace function that
+		# just captures its arguments.
+
+		capturedArguments = {}
+		def f( fileName, fileFormat, dataType, metadata ) :
+
+			capturedArguments.update(
+				{
+					"fileName" : fileName,
+					"fileFormat" : fileFormat,
+					"dataType" : dataType,
+					"metadata" : metadata,
+				}
+			)
+			return "linear"
+
+		GafferImage.ImageReader.setDefaultColorSpaceFunction( f )
+
+		# Verify that the correct arguments are passed for
+		# a variety of fileNames and dataTypes.
+
+		for ext, fileFormat, dataType in [
+			( "exr", "openexr", "half" ),
+			( "dpx", "dpx", "uint12" ),
+			( "TIFF", "tiff", "float" ),
+			( "tif", "tiff", "uint32" ),
+		] :
+
+			w["fileName"].setValue( "{0}/{1}.{2}".format( self.temporaryDirectory(), dataType, ext ) )
+			w[fileFormat]["dataType"].setValue( dataType )
+			w.execute()
+
+			capturedArguments.clear()
+			r["out"].channelData( "R", imath.V2i( 0 ) ) # Triggers call to color space function
+
+			self.assertEqual( len( capturedArguments ), 4 )
+			self.assertEqual( capturedArguments["fileName"], w["fileName"].getValue() )
+			self.assertEqual( capturedArguments["fileFormat"], fileFormat )
+			self.assertEqual( capturedArguments["dataType"], dataType )
+			self.assertEqual( capturedArguments["metadata"], r["out"]["metadata"].getValue() )
+
+	def testDisabling( self ) :
+
+		reader = GafferImage.ImageReader()
+		reader["fileName"].setValue( self.fileName )
+		reader["enabled"].setValue( False )
+
+		constant = GafferImage.Constant()
+		constant["enabled"].setValue( False )
+
+		self.assertImagesEqual( reader["out"], constant["out"] )
 
 if __name__ == "__main__":
 	unittest.main()
