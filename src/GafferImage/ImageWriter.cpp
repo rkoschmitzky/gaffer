@@ -47,6 +47,7 @@
 #include "Gaffer/Context.h"
 #include "Gaffer/ScriptNode.h"
 #include "Gaffer/StringPlug.h"
+#include "Gaffer/FileSystemPathPlug.h"
 
 #include "IECoreImage/OpenImageIOAlgo.h"
 
@@ -812,14 +813,14 @@ const GafferImage::ImagePlug *ImageWriter::inPlug() const
 	return getChild<ImagePlug>( g_firstPlugIndex );
 }
 
-Gaffer::StringPlug *ImageWriter::fileNamePlug()
+Gaffer::FileSystemPathPlug *ImageWriter::fileNamePlug()
 {
-	return getChild<StringPlug>( g_firstPlugIndex+1 );
+	return getChild<FileSystemPathPlug>( g_firstPlugIndex+1 );
 }
 
-const Gaffer::StringPlug *ImageWriter::fileNamePlug() const
+const Gaffer::FileSystemPathPlug *ImageWriter::fileNamePlug() const
 {
-	return getChild<StringPlug>( g_firstPlugIndex+1 );
+	return getChild<FileSystemPathPlug>( g_firstPlugIndex+1 );
 }
 
 Gaffer::StringPlug *ImageWriter::channelsPlug()
