@@ -54,8 +54,8 @@ class GAFFERSCENE_API ExternalProcedural : public ObjectSource
 		ExternalProcedural( const std::string &name=defaultName<ExternalProcedural>() );
 		~ExternalProcedural() override;
 
-		Gaffer::StringPlug *fileNamePlug();
-		const Gaffer::StringPlug *fileNamePlug() const;
+		Gaffer::FileSystemPathPlug *fileNamePlug();
+		const Gaffer::FileSystemPathPlug *fileNamePlug() const;
 
 		Gaffer::Box3fPlug *boundPlug();
 		const Gaffer::Box3fPlug *boundPlug() const;
