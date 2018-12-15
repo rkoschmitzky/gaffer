@@ -89,6 +89,151 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 			# TODO: what should a drive letter path return on POSIX?
 			# Error? 'C:' -> '/C/'?
 
+	def testExpansion( self ) :
+
+		n = GafferTest.StringInOutNode()
+		self.assertHashesValid( n )
+
+		# nothing should be expanded when we're in a non-computation context
+		n["in"].setValue( "testyTesty.##.exr" )
+		self.assertEqual( n["in"].getValue(), "testyTesty.##.exr" )
+
+		n["in"].setValue( "${a}/$b/${a:b}" )
+		self.assertEqual( n["in"].getValue(), "${a}/$b/${a:b}" )
+
+		# but expansions should happen magically when the compute()
+		# calls getValue().
+		context = Gaffer.Context()
+		context.setFrame( 10 )
+		n["in"].setValue( "testyTesty.###.exr" )
+		with context :
+			self.assertEqual( n["out"].getValue(), "testyTesty.010.exr" )
+
+		context["A"] = "apple"
+		n["in"].setValue( "what a lovely $A" )
+		with context :
+			self.assertEqual( n["out"].getValue(), "what a lovely apple" )
+		n["in"].setValue( "what a lovely ${A}" )
+		with context :
+			self.assertEqual( n["out"].getValue(), "what a lovely apple" )
+		context["A"] = "peach"
+		with context :
+			self.assertEqual( n["out"].getValue(), "what a lovely peach" )
+
+		context["env:dir"] = "a/path"
+		n["in"].setValue( "a/${env:dir}/b" )
+		with context :
+			self.assertEqual( n["out"].getValue(), "a/a/path/b" )
+
+		n["in"].setValue( "$dontExist" )
+		with context :
+			self.assertEqual( n["out"].getValue(), "" )
+
+		# once again, nothing should be expanded when we're in a
+		# non-computation context
+		n["in"].setValue( "testyTesty.##.exr" )
+		self.assertEqual( n["in"].getValue(), "testyTesty.##.exr" )
+
+	def testRecursiveExpansion( self ) :
+
+		n = GafferTest.StringInOutNode()
+		n["in"].setValue( "$a" )
+
+		context = Gaffer.Context()
+		context["a"] = "a$b"
+		context["b"] = "b"
+
+		with context :
+			self.assertEqual( n["out"].getValue(), "ab" )
+
+	def testRecursiveExpansionCycles( self ) :
+
+		n = GafferTest.StringInOutNode()
+		n["in"].setValue( "$a" )
+
+		context = Gaffer.Context()
+		context["a"] = "a$b"
+		context["b"] = "b$a"
+
+		with context :
+			self.assertRaises( RuntimeError, n["out"].getValue )
+
+	def testDefaultValueExpansion( self ) :
+
+		n = GafferTest.StringInOutNode( defaultValue = "${A}" )
+		context = Gaffer.Context()
+		context["A"] = "b"
+		with context :
+			self.assertEqual( n["out"].getValue(), "b" )
+
+	def testExpansionFromInputConnection( self ) :
+
+		p = Gaffer.FileSystemPathPlug()
+		p.setValue( "${foo}" )
+
+		n = GafferTest.FileSystemPathInOutNode()
+		n["in"].setInput( p )
+
+		c = Gaffer.Context()
+		with c :
+			self.assertEqual( n["out"].getValue(), "" )
+			h = n["out"].hash()
+
+		c["foo"] = "foo"
+		with c :
+			self.assertNotEqual( n["out"].hash(), h )
+			self.assertEqual( n["out"].getValue(), "foo" )
+
+	def testExpansionMask( self ) :
+
+		n1 = GafferTest.StringInOutNode( substitutions = Gaffer.Context.Substitutions.AllSubstitutions )
+		n2 = GafferTest.StringInOutNode( substitutions = Gaffer.Context.Substitutions.AllSubstitutions & ~Gaffer.Context.Substitutions.FrameSubstitutions )
+
+		n1["in"].setValue( "hello.####.${ext}" )
+		n2["in"].setValue( "hello.####.${ext}" )
+		self.assertEqual( n1["out"].getValue(), os.path.expanduser( "hello.0001." ) )
+		self.assertEqual( n2["out"].getValue(), os.path.expanduser( "hello.####." ) )
+
+		c = Gaffer.Context()
+		c["ext"] = "cob"
+		c.setFrame( 10 )
+		with c :
+			self.assertEqual( n1["out"].getValue(), os.path.expanduser( "hello.0010.cob" ) )
+			self.assertEqual( n2["out"].getValue(), os.path.expanduser( "hello.####.cob" ) )
+
+	def testSubstitutionsSerialisation( self ) :
+
+		s = Gaffer.ScriptNode()
+		s["n"] = Gaffer.Node()
+		s["n"]["p"] = Gaffer.FileSystemPathPlug(
+			"p",
+			flags = Gaffer.Plug.Flags.Default | Gaffer.Plug.Flags.Dynamic,
+			substitutions = Gaffer.Context.Substitutions.AllSubstitutions & ~Gaffer.Context.Substitutions.FrameSubstitutions
+		)
+		self.assertEqual( s["n"]["p"].substitutions(), Gaffer.Context.Substitutions.AllSubstitutions & ~Gaffer.Context.Substitutions.FrameSubstitutions )
+
+		s2 = Gaffer.ScriptNode()
+		s2.execute( s.serialise() )
+		self.assertEqual( s["n"]["p"].substitutions(), s2["n"]["p"].substitutions() )
+
+	def testSubstitutionsRepr( self ) :
+
+		p = Gaffer.FileSystemPathPlug(
+			substitutions = Gaffer.Context.Substitutions.TildeSubstitutions | Gaffer.Context.Substitutions.FrameSubstitutions
+		)
+
+		p2 = eval( repr( p ) )
+		self.assertEqual( p.substitutions(), p2.substitutions() )
+
+	def testSubstitutionsCounterpart( self ) :
+
+		p = Gaffer.FileSystemPathPlug(
+			substitutions = Gaffer.Context.Substitutions.TildeSubstitutions | Gaffer.Context.Substitutions.FrameSubstitutions
+		)
+
+		p2 = p.createCounterpart( "p2", p.Direction.In )
+		self.assertEqual( p.substitutions(), p2.substitutions() )
+
 	def testTildeExpansion( self ) :
 
 		n = GafferTest.FileSystemPathInOutNode()
@@ -97,7 +242,7 @@ class FileSystemPathPlugTest( GafferTest.TestCase ) :
 		self.assertEqual( n["out"].getValue(), os.path.expanduser( "~" ) )
 
 		n["in"].setValue( "~/something.tif" )
-		self.assertEqual( n["out"].getValue(), os.path.expanduser( "~/something.tif" ) )
+		self.assertEqual( n["out"].getValue(), os.path.join( os.path.expanduser( "~"), "something.tif" ) )
 
 		# ~ shouldn't be expanded unless it's at the front - it would
 		# be meaningless in other cases.
