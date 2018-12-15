@@ -71,7 +71,7 @@ class GAFFER_API FileSystemPathPlug : public StringPlug
 			Direction direction=In,
 			const std::string &defaultValue = "",
 			unsigned flags = Default,
-			unsigned substitutions = Context::AllSubstitutions & ~Context::FrameSubstitutions
+			unsigned substitutions = Context::AllSubstitutions
 		);
 		~FileSystemPathPlug() override;
 
