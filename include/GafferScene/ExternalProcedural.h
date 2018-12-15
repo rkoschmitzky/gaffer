@@ -40,6 +40,7 @@
 #include "GafferScene/ObjectSource.h"
 
 #include "Gaffer/CompoundDataPlug.h"
+#include "Gaffer/FileSystemPathPlug.h"
 
 namespace GafferScene
 {

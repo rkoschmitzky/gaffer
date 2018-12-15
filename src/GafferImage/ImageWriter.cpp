@@ -686,7 +686,12 @@ ImageSpec createImageSpec( const ImageWriter *node, const ImageOutput *out, cons
 
 	spec.attribute( "HostComputer", boost::asio::ip::host_name() );
 
-	if ( const char *artist = getenv( "USER" ) )
+#ifdef _WIN32
+	const char *artist = getenv("username");
+#else
+	const char *artist = getenv( "USER" );
+#endif
+	if ( artist )
 	{
 		spec.attribute( "Artist", artist );
 	}
@@ -719,7 +724,7 @@ ImageWriter::ImageWriter( const std::string &name )
 {
 	storeIndexOfNextChild( g_firstPlugIndex );
 	addChild( new ImagePlug( "in" ) );
-	addChild( new StringPlug( "fileName" ) );
+	addChild( new FileSystemPathPlug( "fileName" ) );
 	addChild( new StringPlug( "channels", Gaffer::Plug::In, "*" ) );
 	addChild( new StringPlug( "colorSpace" ) );
 	addChild( new ImagePlug( "out", Plug::Out, Plug::Default & ~Plug::Serialisable ) );

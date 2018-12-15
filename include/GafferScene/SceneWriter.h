@@ -61,7 +61,7 @@ class GAFFERSCENE_API SceneWriter : public GafferDispatch::TaskNode
 
 		IE_CORE_DECLARERUNTIMETYPEDEXTENSION( GafferScene::SceneWriter, SceneWriterTypeId, GafferDispatch::TaskNode );
 
-		Gaffer::StringPlug *fileNamePlug();
+		Gaffer::FileSystemPathPlug *fileNamePlug();
 		const Gaffer::FileSystemPathPlug *fileNamePlug() const;
 
 		ScenePlug *inPlug();
