@@ -128,3 +128,5 @@ class FileSystemPathPlugValueWidget( GafferUI.PathPlugValueWidget ) :
 			v = Gaffer.Metadata.value( self.getPlug(), "fileSystemPathPlugValueWidget:" + name )
 
 		return v
+
+GafferUI.PlugValueWidget.registerType( Gaffer.FileSystemPathPlug, FileSystemPathPlugValueWidget )
